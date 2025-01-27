@@ -1,112 +1,96 @@
 #include <raylib.h>
+#include <raymath.h>
 
-typedef struct
-{
-    float x;
-    float y;
-    int count;
-} SpriteSet;
+Vector2 getDirection(){
+    Vector2 direction = {0.0f, 0.0f};
+    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)){ direction = Vector2Add(direction, {1.0f , 0.0f}); }
+    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)){ direction = Vector2Add(direction, {-1.0f, 0.0f}); }
+    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)){ direction = Vector2Add(direction, {0.0f, 1.0f}); }
+    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)){ direction = Vector2Add(direction, {0.0f, -1.0f}); }
+    if (Vector2Length(direction) > 0.0f) { direction = Vector2Normalize(direction); }
+    return direction;
+}
 
 int main()
 {
     int screenWidth = 1280;
     int screenHeight = 720;
-    InitWindow(screenWidth, screenHeight, "Father and Son");
+    InitWindow(screenWidth, screenHeight, "Lazy Bee");
     SetTargetFPS(60);
 
-    // Initialize Tiles
-    Texture2D tileTexture = LoadTexture("assets/tileset.png");
+    // Init Audio
+    InitAudioDevice();
+    Music music = LoadMusicStream("assets/beez.mp3");
+    PlayMusicStream(music);
+
+    // Init Tiles
+    Texture2D tileTexture = LoadTexture("assets/grass.png");
     Vector2 tileFrameSize = {16.0f, 16.0f};
+    Rectangle tileSourceRec = { tileFrameSize.x, tileFrameSize.y, tileFrameSize.x, tileFrameSize.y};
 
-    Rectangle tileSourceRec = { tileFrameSize.x * 11 + 11, tileFrameSize.y * 10 + 10, tileFrameSize.x, tileFrameSize.y};
-
-
-    // Initialize Background 
-    // Texture2D backTexture = LoadTexture("assets/map.png");
-    // Vector2 backFrameSize = {639.0f, 271.0f};
-    // Rectangle backSourceRec = {0.0f, 0.0f, backFrameSize.x, backFrameSize.y};
-    // Rectangle backDestRec = {0.0f, 0.0f, backFrameSize.x, backFrameSize.y};
-    // Vector2 backOrigin = {0.0f, 0.0f};
-
-    // Initialize Character
-    Texture2D characterTexture = LoadTexture("assets/character.png");
-    Vector2 charFrameSize = {32.0f, 32.0f};
-
-    SpriteSet idle = {0.0f, 0.0f, 2};
-    SpriteSet walkingDown = {0.0f, 96.0f, 4};
-    SpriteSet walkingRight = {0.0f, 128.0f, 4};
-    SpriteSet walkingUp = {0.0f, 160.0f, 4};
-    SpriteSet current = idle;
-
-    Rectangle charSourceRec = {idle.x, idle.y, charFrameSize.x, charFrameSize.y};
+    // Init Character
+    Texture2D characterTexture = LoadTexture("assets/character_bee.png");
+    Vector2 charFrameSize = {16.0f, 16.0f};
+    Rectangle charSourceRec = {0.0f, 0.0f, charFrameSize.x, charFrameSize.y};
     Vector2 charPosition = {0.0f, 0.0f};
     Vector2 charOrigin = {charFrameSize.x / 2.0f, charFrameSize.y / 2.0f};
+    float charRotation = 0.0f;
 
+    // Init Character Animation
     int currentFrame = 0;
     int framesCounter = 0;
-    int framesSpeed = 4;
+    int framesSpeed = 10;
 
-    // Initialize Camera
+    // Init Camera
     Camera2D camera = { 0 };
     camera.target = charPosition;
     camera.offset = (Vector2){screenWidth / 2.0f, screenHeight / 2.0f};
     camera.rotation = 0.0f;
     camera.zoom = 10.0f;
 
+    // Init hive
+    Texture2D hiveTexture = LoadTexture("assets/hive.png");
+    Vector2 hiveFrameSize = {32.0f,32.0f};
+    Rectangle hiveSourceRec = {0.0f, 0.0f, hiveFrameSize.x, hiveFrameSize.y};
+    Vector2 hivePosition = {0.0f,0.0f};
+    Rectangle hiveDestRec = {hivePosition.x, hivePosition.y, hiveFrameSize.x, hiveFrameSize.y};
+    Vector2 hiveOrigin = {hiveFrameSize.x / 2.0f, hiveFrameSize.y / 2.0f};
+
     while (!WindowShouldClose())
     {
-        // Update Character
-        if (IsKeyDown(KEY_RIGHT))
-        {
-            current = walkingRight;
-            charSourceRec.width = charFrameSize.x;
-            charPosition.x += 0.5f;
-        }
-        else if (IsKeyDown(KEY_LEFT))
-        {
-            current = walkingRight;
-            charSourceRec.width = -charFrameSize.x;
-            charPosition.x -= 0.5f;
-        }
-        else if (IsKeyDown(KEY_DOWN))
-        {
-            current = walkingDown;
-            charSourceRec.width = charFrameSize.x;
-            charPosition.y += 0.5f;
-        }
-        else if (IsKeyDown(KEY_UP))
-        {
-            current = walkingUp;
-            charSourceRec.width = charFrameSize.x;
-            charPosition.y -= 0.5f;
-        }
-        else
-        {
-            current = idle;
-            charSourceRec.width = charFrameSize.x;
+        UpdateMusicStream(music);
+
+
+        // Update Char Movement
+        Vector2 direction = getDirection();
+        Vector2 targetPosition = Vector2Add(charPosition, Vector2Scale(direction, 100.0f * GetFrameTime())); 
+        charPosition = {Lerp(charPosition.x, targetPosition.x, 0.3f),Lerp(charPosition.y, targetPosition.y, 0.3f)};
+
+        // Update Char Rotation
+        if (Vector2Length(direction) > 0.0f) {
+            float targetRotation = atan2(direction.y, direction.x) * (180.0f / PI) + 90.0f;
+            charRotation = Lerp(charRotation, targetRotation, 0.1f); 
         }
 
+        // Update Char Animation
         framesCounter++;
 
         if (framesCounter >= (60 / framesSpeed))
         {
             framesCounter = 0;
             currentFrame++;
-            if (currentFrame >= current.count)
+            if (currentFrame >= 4)
                 currentFrame = 0;
-
-            charSourceRec.x = current.x + currentFrame * charFrameSize.x;
-            charSourceRec.y = current.y;
+            charSourceRec.y = currentFrame * charFrameSize.y;
         }
 
-        // Update Camera
+        // Update Char Camera
         camera.target = charPosition;
 
         // Render
         BeginDrawing();
-        ClearBackground(RAYWHITE);
-
-        BeginMode2D(camera); // Activate 2D camera
+        ClearBackground(BLACK);
+        BeginMode2D(camera);
 
         // Render Tiles
         float left = camera.target.x - (screenWidth / 2.0f / camera.zoom);
@@ -129,37 +113,24 @@ int main()
             }
         }
 
-        // Render Background
-        // DrawTexturePro(backTexture, backSourceRec, backDestRec, backOrigin, 0.0f, WHITE);
+        // Render Hive
+        DrawTexturePro(hiveTexture, hiveSourceRec, hiveDestRec, hiveOrigin, 0.0f, WHITE);
 
         // Render Character
         Rectangle charDestRec = {charPosition.x, charPosition.y, charFrameSize.x, charFrameSize.y};
-        DrawTexturePro(characterTexture, charSourceRec, charDestRec, charOrigin, 0.0f, WHITE);
+        DrawTexturePro(characterTexture, charSourceRec, charDestRec, charOrigin, charRotation, WHITE);
 
         EndMode2D();
-        
-        // Render Debug
-
         EndDrawing();
     }
 
     // Unload Character
     UnloadTexture(characterTexture);
     UnloadTexture(tileTexture);
-    // UnloadTexture(backTexture);
+    UnloadMusicStream(music);
 
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;
 }
-
-
-/*
-DrawRectangleLines(charDestRec.x, charDestRec.y, charFrameSize.x, charFrameSize.y, GREEN);
-DrawRectangleLines(charPosition.x, charPosition.y, charFrameSize.x, charFrameSize.y, GREEN);
-DrawRectangleLines(camera.offset.x, camera.offset.y, charFrameSize.x, charFrameSize.y, RED);
-DrawRectangleLines(camera.target.x, camera.target.y, charFrameSize.x, charFrameSize.y, RED);
-DrawText(TextFormat("charDestRec: %f, %f", charDestRec.x, charDestRec.y),10,10,20,GREEN);
-DrawText(TextFormat("charSourceRec: %f, %f", charSourceRec.x, charSourceRec.y),10,30,20,GREEN);
-DrawFPS(screenWidth - 30, 10);
-*/
