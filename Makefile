@@ -1,7 +1,7 @@
-CXX = clang++
+CXX = clang
 EMCC = emcc
-FLAGS = -Wall -std=c++17 $(shell pkg-config --libs --cflags raylib)
-SRC = scripts/main.cpp
+FLAGS = -std=c99 -g -Wall -Werror -Wpedantic -Wconversion -Wshadow -Wstrict-prototypes -fsanitize=address,undefined -O0 $(shell pkg-config --libs --cflags raylib)
+SRC = scripts/main.c 
 
 # ARM Build
 ARM_TARGET = bin/game
