@@ -62,7 +62,18 @@ typedef struct {
     float velocity;
 } Entity;
 
+typedef struct {
+    Entity entity;
+    Object targetFlower;
+    Object hive;
+} Bee;
+
 // Pure functions
+
+bool IsVectorZero(Vector2 v) {
+    float epsilon = 0.01f;
+    return (fabs(v.x) < epsilon && fabs(v.y) < epsilon);
+}
 
 float GetRandomFloat(const float min, const float max){
     return min + (float)rand() / (float)(RAND_MAX / (max - min));
@@ -100,6 +111,21 @@ ObjectArray CreateObjectArray(const Object *prototype, const size_t count) {
     return objects;
 }
 
+void AddObjectToArray(ObjectArray *objects, const Object *prototype, Vector2 position) {
+    Object *newData = realloc(objects->data, (objects->count + 1) * sizeof(Object));
+    if (newData) {
+        objects->data = newData;
+        objects->data[objects->count] = *prototype;
+        objects->data[objects->count].position = position;
+        objects->data[objects->count].sprite.destRec.x = position.x;
+        objects->data[objects->count].sprite.destRec.y = position.y;
+        objects->count++;
+    } else {
+        printf("Memory allocation failed while adding an object.\n");
+    }
+}
+
+
 // Mutator Functions
 
 void GetDirectionFromInput(Vector2 *direction){
@@ -109,6 +135,17 @@ void GetDirectionFromInput(Vector2 *direction){
     if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)){ direction->y += 1.0f; }
     if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)){ direction->y -= 1.0f; }
     if (Vector2Length(*direction) > 0.0f) { *direction = Vector2Normalize(*direction); }
+}
+
+Object* GetRandomObject(ObjectArray *objects){
+    if (objects->count == 0) {
+        return NULL;
+    }
+    return &objects->data[GetRandomValue(0, (int)objects->count-1)];
+}
+
+Vector2 GetDirectionToObject(Object *object, Vector2 position){
+    return Vector2Normalize(Vector2Subtract(object->position, position));
 }
 
 void SetPositionOnDirectionAndVelocity(const Vector2 *direction, const float *velocity, Vector2 *position) {
@@ -178,12 +215,12 @@ void SetRandomPositionForObjectArray(ObjectArray *objects, const Rectangle bound
     }
 }
 
-void UpdateEntity(Entity *entity) {
-    GetDirectionFromInput(&entity->direction);
-    SetRotationOnDirection(&entity->direction, &entity->animSprite.sprite.rotation);
-    SetPositionOnDirectionAndVelocity(&entity->direction, &entity->velocity, &entity->position);
-    SetDestRecOnPosition(&entity->position, &entity->animSprite.sprite);
-    SetAnimSpriteOnFrameTime(&entity->animSprite);
+void UpdatePlayer(Entity *player) {
+    GetDirectionFromInput(&player->direction);
+    SetRotationOnDirection(&player->direction, &player->animSprite.sprite.rotation);
+    SetPositionOnDirectionAndVelocity(&player->direction, &player->velocity, &player->position);
+    SetDestRecOnPosition(&player->position, &player->animSprite.sprite);
+    SetAnimSpriteOnFrameTime(&player->animSprite);
 }
 
 void UpdateTileSprite(TileSprite *tileSprite, const Camera2D *camera){
@@ -197,10 +234,25 @@ void UpdateCamera2D(Camera2D *camera, const Entity *player, const float smoothne
     camera->target = Vector2Lerp(camera->target, player->position, smoothness * GetFrameTime());
 }
 
-void SwapAndPopObjectsArrayOnCollision(ObjectArray *objects, const Rectangle rec){
+void SwapAndPopObjectsArrayOnRecCollision(ObjectArray *objects, const Rectangle rec){
     for (int i = 0; i < objects->count; i++){
 
         if (CheckCollisionRecs(rec, objects->data[i].sprite.destRec)){
+            if (objects->count == 1) {
+                objects->count = 0;
+                break;
+            }
+            objects->data[i] = objects->data[objects->count - 1];
+            objects->count--;
+            i--;
+        }
+    }
+}
+
+void SwapAndPopObjectsArrayOnPointCollision(ObjectArray *objects, const Vector2 point){
+    for (int i = 0; i < objects->count; i++){
+
+        if (CheckCollisionPointRec(point, objects->data[i].sprite.destRec)){
             if (objects->count == 1) {
                 objects->count = 0;
                 break;
@@ -247,7 +299,7 @@ int main(void)
 {
     // Load
     // SetConfigFlags(FLAG_VSYNC_HINT);
-    InitWindow(1280, 720, "Lazy Bee"); 
+    InitWindow(1280, 720, "The Last Hive"); 
     InitAudioDevice(); 
     Music music = LoadMusicStream("assets/beez.mp3"); 
     PlayMusicStream(music);
@@ -287,7 +339,7 @@ int main(void)
             .color = WHITE
         },
         .position = {0.0f, 0.0f}
-    }, 10);
+    }, 1);
     if (!flowers.data) {
         printf("Memory allocation failed.\n");
         exit(1);
@@ -316,6 +368,33 @@ int main(void)
         .direction = (Vector2){0.0f,0.0f},
         .velocity = 50.0f
     };
+
+    Bee bee1 = {
+        .entity = {
+            .animSprite = {
+                .sprite = {
+                    .texture = LoadTexture("assets/character_bee.png"),
+                    .frameSize = {16.0f, 16.0f},
+                    .sourceRec = {0.0f, 0.0f, 16.0f, 16.0f},
+                    .destRec = {0.0f, 0.0f, 16.0f, 16.0f},
+                    .origin = {8.0f, 8.0f},
+                    .rotation = 0.0f,
+                    .color = WHITE
+                },
+                .currentFrame = 0,
+                .maxFrame = 4,
+                .framesCounter = 0,
+                .framesSpeed = 10,
+                .isVertical = true,
+                .animTimer = 0.0f
+            },
+            .position = hive.position,
+            .direction = (Vector2){0.0f,0.0f},
+            .velocity = 5.0f
+        },
+        .targetFlower = *GetRandomObject(&flowers),
+        .hive = hive
+    };
     Camera2D camera = {
         .offset = (Vector2){GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f},
         .target = player.position,
@@ -323,18 +402,46 @@ int main(void)
         .zoom = 10.0f
     };
     float followSmoothness = 5.0f;
-    Vector2 mousePoint = { 0.0f, 0.0f};
 
     // Update & Render
     while (!WindowShouldClose())
     {
         // Update
-        mousePoint = GetMousePosition();
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
+            AddObjectToArray(&flowers, flowers.prototype, mouseWorldPos);
+        }
+
         UpdateMusicStream(music);
         UpdateTileSprite(&floor, &camera);
-        UpdateEntity(&player);
+        UpdatePlayer(&player);
+
+        const float tolerance = 1.0f; // Adjust as needed
+
+        if (fabs(bee1.entity.position.x - bee1.targetFlower.position.x) < tolerance &&
+            fabs(bee1.entity.position.y - bee1.targetFlower.position.y) < tolerance) {
+            bee1.entity.velocity = 0.0f;
+        } else {
+            SetPositionOnDirectionAndVelocity(&bee1.entity.direction, &bee1.entity.velocity, &bee1.entity.position);
+            bee1.entity.direction = GetDirectionToObject(&bee1.targetFlower, bee1.entity.position);
+        }
+
+        SetRotationOnDirection(&bee1.entity.direction, &bee1.entity.animSprite.sprite.rotation);
+        SetDestRecOnPosition(&bee1.entity.position, &bee1.entity.animSprite.sprite);
+        SetAnimSpriteOnFrameTime(&bee1.entity.animSprite);
+
         UpdateCamera2D(&camera, &player, followSmoothness);
-        SwapAndPopObjectsArrayOnCollision(&flowers, player.animSprite.sprite.destRec);
+
+        float wheel = GetMouseWheelMove();
+        if (wheel != 0)
+        {
+            float zoomSpeed = 0.10f;
+            float scaleFactor = 1.0f + (zoomSpeed*fabsf(wheel));
+            if (wheel < 0) scaleFactor = 1.0f/scaleFactor;
+            float targetZoom = Clamp(camera.zoom*scaleFactor, 5.0f, 10.0f);
+            camera.zoom = Lerp(camera.zoom, targetZoom, 0.1f);
+        }
+
         // Render
         BeginDrawing();
             ClearBackground(BLACK);
@@ -342,7 +449,8 @@ int main(void)
                 RenderTileSprite(&floor);
                 RenderSprite(&hive.sprite);
                 RenderObjectArray(&flowers);
-                RenderSprite(&player.animSprite.sprite);  
+                RenderSprite(&bee1.entity.animSprite.sprite);
+                // RenderSprite(&player.animSprite.sprite);  
             EndMode2D();
             DrawFPS(10,10);
         EndDrawing();
@@ -351,6 +459,7 @@ int main(void)
     UnloadTexture(floor.sprite.texture);
     UnloadTexture(hive.sprite.texture);
     UnloadTexture(flower);
+    UnloadTexture(bee1.entity.animSprite.sprite.texture);
     UnloadTexture(player.animSprite.sprite.texture);
     UnloadMusicStream(music);
     free(flowers.data);
