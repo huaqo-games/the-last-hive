@@ -1,10 +1,12 @@
 #ifndef OBJECT_H
 #define OBJECT_H
-#include <raylib.h> // Vector2, Rectangle, Color, GetRandomValue(), CheckCollisionRecs(), CheckCollisionPointRec()
-#include <stdio.h> // printf()
-#include <stdlib.h> // malloc(), realloc()
-#include "sprite.h" // Sprite
+#include <raylib.h> 
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <raymath.h> 
+#include "sprite.h" 
 #include "vector.h"
+
 
 typedef struct {
     Sprite sprite;

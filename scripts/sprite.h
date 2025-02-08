@@ -1,6 +1,7 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 #include <raylib.h>
+#include <raymath.h> 
 
 typedef struct {
     Texture2D texture;      
@@ -20,6 +21,14 @@ void UpdateSpriteSourceRec(Sprite *sprite, const Vector2 *vector){
 void UpdateSpriteDestRec(Sprite *sprite, const Vector2 *vector){
     sprite->destRec.x = vector->x;
     sprite->destRec.y = vector->y;
+}
+
+void UpdateSpriteRotation(Sprite *sprite, Vector2 *vector){
+    if(Vector2Length(*vector) <= 0.0f){
+        return;
+    }
+    float targetRotation = (float)atan2(vector->y, vector->x) * (180.0f / PI) + 90.0f;
+    sprite->rotation = Lerp(sprite->rotation, targetRotation, 0.1f); 
 }
 
 void RenderSprite(const Sprite *sprite){
