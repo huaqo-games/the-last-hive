@@ -3,7 +3,6 @@
 #include <raylib.h>
 #include <raymath.h> 
 
-
 typedef struct {
     Vector2 position;
     Vector2 direction;
