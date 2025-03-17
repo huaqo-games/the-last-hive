@@ -1,9 +1,5 @@
 #ifndef OBJECT_H
 #define OBJECT_H
-#include <raylib.h> 
-#include <stdio.h> 
-#include <stdlib.h> 
-#include <raymath.h> 
 #include "sprite.h" 
 #include "vector.h"
 
@@ -22,13 +18,13 @@ typedef struct {
 ObjectArray CreateObjectArray(const Object *prototype, const size_t count) {
     ObjectArray objects = {0};
 
-    if (count <= 0) {
+    if (count == 0) {
         printf("Objects size must be greater than 0.\n");
         return objects;
     }
 
     objects.count = count;
-    objects.data = malloc(count * sizeof(Object));
+    objects.data = (Object* )malloc(count * sizeof(Object));
 
     if (!objects.data) {
         printf("Memory allocation of objects failed.\n");
@@ -45,14 +41,14 @@ ObjectArray CreateObjectArray(const Object *prototype, const size_t count) {
 }
 
 Object* GetRandomObject(ObjectArray *objects){
-    if (objects->count == 0) {
+    if (objects->count == 0 || objects->data == NULL) {
         return NULL;
     }
     return &objects->data[GetRandomValue(0, (int)objects->count-1)];
 }
 
 void AddObjectToArray(ObjectArray *objects, const Object *prototype, Vector2 position) {
-    Object *newData = realloc(objects->data, (objects->count + 1) * sizeof(Object));
+    Object *newData = (Object* )realloc(objects->data, (objects->count + 1) * sizeof(Object));
     if (newData) {
         objects->data = newData;
         objects->data[objects->count] = *prototype;
@@ -100,6 +96,8 @@ void SwapAndPopObjectsArrayOnRecCollision(ObjectArray *objects, const Rectangle 
             i--;
         }
     }
+    objects->data = (Object*)realloc(objects->data, objects->count * sizeof(Object));
+
 }
 
 void SwapAndPopObjectsArrayOnPointCollision(ObjectArray *objects, const Vector2 point){
@@ -115,6 +113,7 @@ void SwapAndPopObjectsArrayOnPointCollision(ObjectArray *objects, const Vector2 
             i--;
         }
     }
+    objects->data = (Object*)realloc(objects->data, objects->count * sizeof(Object));
 }
 
 Vector2 GetDirectionToObject(Object *object, Vector2 position){

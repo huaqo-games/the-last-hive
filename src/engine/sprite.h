@@ -1,7 +1,5 @@
 #ifndef SPRITE_H
 #define SPRITE_H
-#include <raylib.h>
-#include <raymath.h> 
 
 typedef struct {
     Texture2D texture;      

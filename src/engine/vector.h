@@ -1,8 +1,5 @@
 #ifndef VECTOR_H
 #define VECTOR_H
-#include <raylib.h>
-#include <stdlib.h> 
-#include <raymath.h> 
 
 typedef struct {
     Vector2 *data;

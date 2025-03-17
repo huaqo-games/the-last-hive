@@ -1,5 +1,5 @@
-#ifndef ANIMSPRITE_H
-#define ANIMSPRITE_H
+#ifndef ANIMATION_H
+#define ANIMATION_H
 
 typedef struct {    
     int currentFrame;       
@@ -25,4 +25,4 @@ void UpdateAnimation(Animation *animation, float deltaTime) {
     }
 }
 
-#endif // ANIMSPRITE_H
+#endif // ANIMATION_H
