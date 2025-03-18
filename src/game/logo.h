@@ -14,7 +14,7 @@ typedef struct {
     float alpha;
 } LogoState;
 
-void initLogo(LogoState *l) {
+void InitLogo(LogoState *l) {
     SetTargetFPS(60);
     
     l->frameCounter = 0;
@@ -29,7 +29,7 @@ void initLogo(LogoState *l) {
     l->alpha = 1.0f;
 }
 
-void updateLogo(LogoState *l, Screen *currentScreen) {
+void UpdateLogo(LogoState *l, Screen *currentScreen) {
     l->frameCounter++;  // Increment the frame counter each frame
 
     if (l->state == 0) { // State 0: Small box blinking for 120 frames (2 seconds at 60 FPS)
@@ -75,7 +75,7 @@ void updateLogo(LogoState *l, Screen *currentScreen) {
     } 
 }
 
-void renderLogo(const LogoState *l) {
+void RenderLogo(const LogoState *l) {
     BeginDrawing();
         ClearBackground(RAYWHITE);
 
