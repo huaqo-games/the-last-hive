@@ -43,7 +43,7 @@ Bee CreateBee(Texture2D texture, float frameWidth, int maxFrame, int framesSpeed
     };
 }
 
-void UpdateBee(Bee* bee, ObjectArray* flowers, Object hive){
+void UpdateBee(Bee* bee, ObjectArray* flowers, Object* hive){
     const float tolerance = 1.0f; 
 
     if (bee->flowerCount < 4){
@@ -54,7 +54,7 @@ void UpdateBee(Bee* bee, ObjectArray* flowers, Object hive){
         } else {
         }
     } else {
-        bee->target = hive;
+        bee->target = *hive;
         if (fabs(bee->physics.position.x - bee->target.position.x) < tolerance &&
             fabs(bee->physics.position.y - bee->target.position.y) < tolerance) {
             bee->physics.speed = 0.0f;
