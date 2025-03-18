@@ -66,7 +66,7 @@ void InitGame(GameState* g){
     g->target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 }
 
-void UpdateGame(GameState* g, Screen *currentScreen){
+void UpdateGame(GameState* g, Screen *currentScreen, bool *running, bool *gameStarted){
     UpdatePostFX(&g->postFX);
     UpdateMusic(&g->ambient);
     UpdateMouse(&g->mouse, &g->camera);

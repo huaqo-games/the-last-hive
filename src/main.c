@@ -10,46 +10,56 @@
 
 int main(void)
 {
-    Settings settings = {
+
+    typedef struct {
+        Screen currentScreen;
+        bool running;
+        bool gameStarted;
+        Settings settings;
+        LogoState logo;
+        GameState game;
+        MenuState menu;
+    } Application;
+
+    Application app;
+    app.currentScreen = LOGO;
+    app.running = true;
+    app.gameStarted = false;
+    app.settings = (Settings){
         .name = "The Last Hive",
         .screenWidth = 1280,
         .screenHeight = 720
     };
 
-    InitWindow(settings.screenWidth, settings.screenHeight, settings.name); 
-    
-    Screen currentScreen = GAMEPLAY;
-    LogoState logo;
-    GameState game;
-    MenuState menu;
+    InitWindow(app.settings.screenWidth, app.settings.screenHeight, app.settings.name); 
 
-    InitLogo(&logo);
-    InitMenu(&menu);
-    InitGame(&game);
+    InitLogo(&app.logo);
+    InitMenu(&app.menu);
+    InitGame(&app.game);
 
-    while (true)
+    while (app.running)
     {
-        switch (currentScreen)
+        switch (app.currentScreen)
         {
             case LOGO:
             {
-                UpdateLogo(&logo,&currentScreen);
-                RenderLogo(&logo);
+                UpdateLogo(&app.logo,&app.currentScreen);
+                RenderLogo(&app.logo);
             }break;
             case MENU:
             {
-                UpdateMenu(&menu, &currentScreen);
-                RenderMenu(&menu);
+                UpdateMenu(&app.menu, &app.currentScreen, &app.running, &app.gameStarted);
+                RenderMenu(&app.menu);
             }break;
             case GAMEPLAY:
             {
-                UpdateGame(&game, &currentScreen);
-                RenderGame(&game);
+                UpdateGame(&app.game, &app.currentScreen, &app.running, &app.gameStarted);
+                RenderGame(&app.game);
             }break;
             default: break;
         } 
     }
-    CleanupGame(&game);
+    CleanupGame(&app.game);
     CloseWindow();
     return 0;
 }
