@@ -18,14 +18,14 @@ int main(void)
 
     InitWindow(settings.screenWidth, settings.screenHeight, settings.name); 
     
-    Screen currentScreen = LOGO;
+    Screen currentScreen = GAMEPLAY;
     LogoState logo;
     GameState game;
     MenuState menu;
 
-    initLogo(&logo);
-    initMenu(&menu);
-    initGame(&game);
+    InitLogo(&logo);
+    InitMenu(&menu);
+    InitGame(&game);
 
     while (!WindowShouldClose())
     {
@@ -33,23 +33,23 @@ int main(void)
         {
             case LOGO:
             {
-                updateLogo(&logo,&currentScreen);
-                renderLogo(&logo);
+                UpdateLogo(&logo,&currentScreen);
+                RenderLogo(&logo);
             }break;
             case MENU:
             {
-                updateMenu(&menu, &currentScreen);
-                renderMenu(&menu);
+                UpdateMenu(&menu, &currentScreen);
+                RenderMenu(&menu);
             }break;
             case GAMEPLAY:
             {
-                updateGame(&game);
-                renderGame(&game);
+                UpdateGame(&game);
+                RenderGame(&game);
             }break;
             default: break;
         } 
     }
-    cleanupGame(&game);
+    CleanupGame(&game);
     CloseWindow();
     return 0;
 }
