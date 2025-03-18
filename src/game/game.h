@@ -66,7 +66,7 @@ void InitGame(GameState* g){
     g->target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 }
 
-void UpdateGame(GameState* g){
+void UpdateGame(GameState* g, Screen *currentScreen){
     UpdatePostFX(&g->postFX);
     UpdateMusic(&g->ambient);
     UpdateMouse(&g->mouse, &g->camera);
@@ -74,6 +74,11 @@ void UpdateGame(GameState* g){
     UpdateFloor(&g->floor, &g->camera);
     UpdatePlayer(&g->player);
     UpdateBee(&g->bee1, &g->flowers, &g->hive);
+
+    if (IsKeyPressed(KEY_ESCAPE)){
+        *currentScreen = MENU;
+    }
+
 }
 
 void RenderComponents(GameState* g){

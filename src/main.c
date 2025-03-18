@@ -27,7 +27,7 @@ int main(void)
     InitMenu(&menu);
     InitGame(&game);
 
-    while (!WindowShouldClose())
+    while (true)
     {
         switch (currentScreen)
         {
@@ -43,7 +43,7 @@ int main(void)
             }break;
             case GAMEPLAY:
             {
-                UpdateGame(&game);
+                UpdateGame(&game, &currentScreen);
                 RenderGame(&game);
             }break;
             default: break;
