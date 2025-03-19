@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "engine/screen.h"
-#include "engine/settings.h"
+#include "engine/display.h"
 #include "engine/applicationstate.h"
 #include "game/logo.h"
 #include "game/menu.h"
@@ -11,7 +11,7 @@
 
 typedef struct {
     State state;
-    Settings settings;
+    Display display;
     LogoState logo;
     GameState game;
     MenuState menu;
@@ -23,13 +23,11 @@ int main(void)
     app.state.currentScreen = LOGO;
     app.state.running = true;
     app.state.gameStarted = false;
-    app.settings = (Settings){
-        .name = "The Last Hive",
-        .screenWidth = 1280,
-        .screenHeight = 720
-    };
+    app.display.name = "The Last Hive";
+    app.display.width = 1280;
+    app.display.height = 720;
 
-    InitWindow(app.settings.screenWidth, app.settings.screenHeight, app.settings.name); 
+    InitWindow(app.display.width, app.display.height, app.display.name); 
 
     InitLogo(&app.logo);
     InitMenu(&app.menu);
