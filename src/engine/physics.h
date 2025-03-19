@@ -9,7 +9,7 @@ typedef struct {
 } Physics;
 
 void UpdatePhysicsDirection(Vector2 *direction, Vector2 vector){
-    *direction = vector;
+    *direction = Vector2Normalize(vector);
 }
 
 void UpdatePhysicsVelocity(Vector2 *velocity, Vector2 *direction, float *speed){
@@ -24,8 +24,8 @@ void UpdatePhysicsSpeed(float *speed, float *newSpeed){
     *speed = *newSpeed;
 }
 
-void UpdatePhysics(Physics *physics, Vector2 target){
-    UpdatePhysicsDirection(&physics->direction, target);
+void UpdatePhysics(Physics *physics, Vector2 direction){
+    UpdatePhysicsDirection(&physics->direction, direction);
     UpdatePhysicsVelocity(&physics->velocity, &physics->direction, &physics->speed);
     UpdatePhysicsPosition(&physics->position, &physics->velocity);
 }
