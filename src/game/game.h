@@ -14,6 +14,7 @@
 #include "flowers.h"
 
 typedef enum {
+    PLAYER,
     FLOWER,
     BEE,
     GRASS,
@@ -21,11 +22,12 @@ typedef enum {
     TEX_COUNT
 } TextureID;
 
+
+
 typedef struct {
     PostProcessing postFX;
     MyMusic ambient;
     RenderTexture2D target;
-    Texture2D flowerTexture, beeTexture, floorTexture, hiveTexture;
     Floor floor;
     Object hive;
     ObjectArray flowers;
@@ -33,11 +35,12 @@ typedef struct {
     Bee bee1;
     Camera2D camera;
     Mouse mouse;
+    Image image;
     TextureAsset textureAssets[TEX_COUNT];
     Texture2D textures[TEX_COUNT];
 } GameState;
 
-void InitGame(GameState* g){
+void InitGame(GameState* g, Display *display){
 
     InitAudioDevice(); 
     
@@ -45,29 +48,32 @@ void InitGame(GameState* g){
     
     g->ambient = CreateMusic("assets/beez.mp3");
 
+    g->textureAssets[PLAYER] = (TextureAsset){"assets/character/character.png", 64.0f, 64.0f, 180.0f};
     g->textureAssets[FLOWER] = (TextureAsset){"assets/flower.png", 16.0f, 16.0f, 45.0f};
     g->textureAssets[BEE] = (TextureAsset){"assets/character_bee.png", 16.0f, 16.0f, 0.0f};
     g->textureAssets[GRASS] = (TextureAsset){"assets/grass.png", 16.0f, 16.0f, 0.0f};
     g->textureAssets[HIVE] = (TextureAsset){"assets/hive.png", 32.0f, 32.0f, 0.0f};
-    
+
+    g->textures[PLAYER] = LoadTexture(g->textureAssets[PLAYER].path);
     g->textures[FLOWER] = LoadTexture(g->textureAssets[FLOWER].path);
     g->textures[BEE] = LoadTexture(g->textureAssets[BEE].path);
     g->textures[GRASS] = LoadTexture(g->textureAssets[GRASS].path);
     g->textures[HIVE] = LoadTexture(g->textureAssets[HIVE].path);
-    
+
+    g->player = CreatePlayer(g->textures[PLAYER], g->textureAssets[PLAYER].frameWidth, 4, 5, g->hive.position, g->textureAssets[PLAYER].rotation, 50.0f);
     g->flowers = CreateFlowers(g->textures[FLOWER], g->textureAssets[FLOWER].frameWidth, g->textureAssets[FLOWER].rotation, 50.0f);    
-    g->player = CreatePlayer(g->textures[BEE], g->textureAssets[BEE].frameWidth, 4, 10, g->hive.position, 50.0f);
     g->floor = CreateFloor(g->textures[GRASS], g->textureAssets[GRASS].frameWidth);
     g->hive = CreateHive(g->textures[HIVE], g->textureAssets[HIVE].frameWidth);
     g->bee1 = CreateBee(g->textures[BEE], g->textureAssets[BEE].frameWidth, 4, 10, g->hive.position, 10.0f, &g->flowers, &g->hive);
 
-    g->camera = CreateCamera(GetScreenWidth(), GetScreenHeight(), g->player.physics.position, 10.0f);
+    g->camera = CreateCamera(display->width, display->height, g->player.physics.position, 5.0f);
     g->mouse = CreateMouse(0.10f, 5.0f, 10.0f);
 
-    g->target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+    g->target = LoadRenderTexture(display->width, display->height);
 }
 
 void UpdateGame(GameState* g, State *state){
+    SetTargetFPS(0);
     UpdatePostFX(&g->postFX);
     UpdateMusic(&g->ambient);
     UpdateMouse(&g->mouse, &g->camera);

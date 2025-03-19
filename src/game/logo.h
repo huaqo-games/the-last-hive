@@ -77,7 +77,6 @@ void UpdateLogo(LogoState *l, State *state) {
         }
     } 
     else if (l->state == 4) {  // State 4: Transition to GAMEPLAY
-        SetTargetFPS(0);
         state->currentScreen = MENU;
     } 
 }
