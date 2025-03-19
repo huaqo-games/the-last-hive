@@ -2,6 +2,7 @@
 #define MENU_H
 
 #include "../engine/gui.h"
+#include "../engine/applicationstate.h"
 
 typedef struct {
     Button startButton;
@@ -10,18 +11,25 @@ typedef struct {
 
 void InitMenu(MenuState *t){
     initButton(&t->startButton, "Start Game", GetScreenWidth() / 10, GetScreenHeight() / 20, GetScreenWidth() / 2, GetScreenHeight() / 2);
-    initButton(&t->quitButton, "Quit Game", GetScreenWidth() / 10, GetScreenHeight() / 20, GetScreenWidth() / 2, GetScreenHeight() / 2 + GetScreenHeight() / 20);
+    initButton(&t->quitButton, "Quit Game", GetScreenWidth() / 10, GetScreenHeight() / 20, GetScreenWidth() / 2, GetScreenHeight() / 2 + (GetScreenHeight() / 20 * 2));
 }
 
-void UpdateMenu(MenuState *t, Screen *currentScreen, bool *running, bool *gameStarted){
+void UpdateMenu(MenuState *t, State *state){
     if (isButtonClicked(&t->startButton)) {
-        *gameStarted = true;
+        state->gameStarted = true;
         t->startButton.text = "Continue";
-        *currentScreen = GAMEPLAY;
+        state->currentScreen = GAMEPLAY;
     }
-    if (isButtonClicked(&t->quitButton)) {
-        *running = false;
+    if (isButtonClicked(&t->quitButton) || (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))) {
+        state->running = false;
     }
+
+    if (state->gameStarted){
+        if (IsKeyPressed(KEY_ESCAPE)){
+            state->currentScreen = GAMEPLAY;
+        }
+    }
+
 }
 
 void RenderMenu(MenuState *t){

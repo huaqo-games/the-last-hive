@@ -1,6 +1,8 @@
 #ifndef LOGO_H
 #define LOGO_H
 
+#include "../engine/applicationstate.h"
+
 typedef struct {
     int frameCounter;
     int positionX;
@@ -29,7 +31,12 @@ void InitLogo(LogoState *l) {
     l->alpha = 1.0f;
 }
 
-void UpdateLogo(LogoState *l, Screen *currentScreen) {
+void UpdateLogo(LogoState *l, State *state) {
+
+    if (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE)) {
+        state->running = false;
+    }
+
     l->frameCounter++;  // Increment the frame counter each frame
 
     if (l->state == 0) { // State 0: Small box blinking for 120 frames (2 seconds at 60 FPS)
@@ -71,7 +78,7 @@ void UpdateLogo(LogoState *l, Screen *currentScreen) {
     } 
     else if (l->state == 4) {  // State 4: Transition to GAMEPLAY
         SetTargetFPS(0);
-        *currentScreen = MENU;
+        state->currentScreen = MENU;
     } 
 }
 

@@ -4,27 +4,25 @@
 #include <stdlib.h>
 #include "engine/screen.h"
 #include "engine/settings.h"
+#include "engine/applicationstate.h"
 #include "game/logo.h"
 #include "game/menu.h"
 #include "game/game.h"
 
+typedef struct {
+    State state;
+    Settings settings;
+    LogoState logo;
+    GameState game;
+    MenuState menu;
+} Application;
+
 int main(void)
 {
-
-    typedef struct {
-        Screen currentScreen;
-        bool running;
-        bool gameStarted;
-        Settings settings;
-        LogoState logo;
-        GameState game;
-        MenuState menu;
-    } Application;
-
     Application app;
-    app.currentScreen = LOGO;
-    app.running = true;
-    app.gameStarted = false;
+    app.state.currentScreen = LOGO;
+    app.state.running = true;
+    app.state.gameStarted = false;
     app.settings = (Settings){
         .name = "The Last Hive",
         .screenWidth = 1280,
@@ -37,23 +35,23 @@ int main(void)
     InitMenu(&app.menu);
     InitGame(&app.game);
 
-    while (app.running)
+    while (app.state.running)
     {
-        switch (app.currentScreen)
+        switch (app.state.currentScreen)
         {
             case LOGO:
             {
-                UpdateLogo(&app.logo,&app.currentScreen);
+                UpdateLogo(&app.logo, &app.state);
                 RenderLogo(&app.logo);
             }break;
             case MENU:
             {
-                UpdateMenu(&app.menu, &app.currentScreen, &app.running, &app.gameStarted);
+                UpdateMenu(&app.menu, &app.state);
                 RenderMenu(&app.menu);
             }break;
             case GAMEPLAY:
             {
-                UpdateGame(&app.game, &app.currentScreen, &app.running, &app.gameStarted);
+                UpdateGame(&app.game, &app.state);
                 RenderGame(&app.game);
             }break;
             default: break;

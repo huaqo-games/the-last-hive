@@ -6,6 +6,7 @@
 #include "../engine/postfx.h"
 #include "../engine/musicmanager.h"
 #include "../engine/asset.h"
+#include "../engine/applicationstate.h"
 #include "floor.h"
 #include "player.h"
 #include "bee.h"
@@ -66,7 +67,7 @@ void InitGame(GameState* g){
     g->target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 }
 
-void UpdateGame(GameState* g, Screen *currentScreen, bool *running, bool *gameStarted){
+void UpdateGame(GameState* g, State *state){
     UpdatePostFX(&g->postFX);
     UpdateMusic(&g->ambient);
     UpdateMouse(&g->mouse, &g->camera);
@@ -76,7 +77,11 @@ void UpdateGame(GameState* g, Screen *currentScreen, bool *running, bool *gameSt
     UpdateBee(&g->bee1, &g->flowers, &g->hive);
 
     if (IsKeyPressed(KEY_ESCAPE)){
-        *currentScreen = MENU;
+        state->currentScreen = MENU;
+    }
+
+    if (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE)) {
+        state->running = false;
     }
 
 }
