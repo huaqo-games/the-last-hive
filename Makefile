@@ -1,7 +1,13 @@
-COMPILER = clang
+ifeq ($(OS), Windows_NT)
+	COMPILER = gcc
+	RAYLIB_FLAGS = -I path\to\raylib\include -L path\to\raylib\lib -lraylib
+else
+	COMPILER = clang
+	RAYLIB_FLAGS = $(shell pkg-config --libs --cflags raylib)
+endif 
+
 C_FLAGS = -std=c99 -g -Wall -Werror -Wpedantic -Wconversion -Wshadow -Wstrict-prototypes -fsanitize=address,undefined -O0 -I../include
 SUPPRESSED_FLAGS = -Wno-conversion -Wno-sign-conversion -Wno-unused-variable -Wno-unused-but-set-variable
-RAYLIB_FLAGS = $(shell pkg-config --libs --cflags raylib)
 SRC = src/main.c 
 TARGET = bin/game
 
