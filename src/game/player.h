@@ -49,10 +49,8 @@ Player CreatePlayer(Texture2D texture, float frameWidth, int maxFrame, int frame
     };
 }
 
-void UpdateState(PlayerState *state) {
-    Vector2 dir = GetDirectionVector();
-
-    if (dir.x == 0 && dir.y == 0) {
+void UpdatePlayerState(PlayerState *state, Vector2 *dir) {
+    if (dir->x == 0 && dir->y == 0) {
         switch (*state) {
             case WALKING_DOWN:  *state = IDLE_DOWN; break;
             case WALKING_UP:    *state = IDLE_UP; break;
@@ -61,19 +59,17 @@ void UpdateState(PlayerState *state) {
             default: break;
         }
     } else {
-        if (dir.y == -1)      *state = WALKING_DOWN;
-        else if (dir.y == 1)  *state = WALKING_UP;
-        else if (dir.x == 1)  *state = WALKING_RIGHT;
-        else if (dir.x == -1) *state = WALKING_LEFT;
+        if (dir->y == -1)      *state = WALKING_DOWN;
+        else if (dir->y == 1)  *state = WALKING_UP;
+        else if (dir->x == 1)  *state = WALKING_RIGHT;
+        else if (dir->x == -1) *state = WALKING_LEFT;
     }
 }
 
-
-
 void UpdatePlayer(Player* player){
-    UpdatePhysics(&player->physics, GetDirectionVector());
-    UpdateState(&player->state);
-    // UpdateSpriteRotation(&player->sprite, &player->physics.direction);
+    Vector2 dir = GetDirectionVector();
+    UpdatePlayerState(&player->state, &dir);
+    UpdatePhysics(&player->physics, dir);
     UpdateSpriteDestRec(&player->sprite, &player->physics.position);
     UpdateAnimation(&player->animation, GetFrameTime());
     UpdateSpriteSourceRec(&player->sprite, &(Vector2){player->sprite.frameSize.x * player->state, player->sprite.frameSize.y * player->animation.currentFrame});
