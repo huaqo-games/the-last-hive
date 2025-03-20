@@ -11,6 +11,8 @@ else
 	RAYLIB_FLAGS = $(shell pkg-config --libs --cflags raylib)
 endif
 
+$(shell mkdir -p bin/osx bin/win)
+
 build: $(SRC)
 	$(COMPILER) $(SRC) -o $(TARGET) $(C_FLAGS) $(RAYLIB_FLAGS)
 
