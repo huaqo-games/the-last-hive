@@ -22,21 +22,21 @@ Floor CreateFloor(Texture2D texture, float textureWidth){
     };
 }
 
-void UpdateFloor(Floor *Floor, const Camera2D *camera){
-    Floor->bounds.x = (int)((camera->target.x - (GetScreenWidth() / 2.0f / camera->zoom)) / Floor->sprite.frameSize.x) - 1;
-    Floor->bounds.width = (int)((camera->target.x + (GetScreenWidth() / 2.0f / camera->zoom)) / Floor->sprite.frameSize.x) + 1;
-    Floor->bounds.y = (int)((camera->target.y - (GetScreenHeight() / 2.0f / camera->zoom)) / Floor->sprite.frameSize.y) - 1;
-    Floor->bounds.height = (int)((camera->target.y + (GetScreenHeight() / 2.0f / camera->zoom)) / Floor->sprite.frameSize.y) + 1;
+void UpdateFloor(Floor *floor, const Camera2D *camera){
+    floor->bounds.x = (int)((camera->target.x - (GetScreenWidth() / 2.0f / camera->zoom)) / floor->sprite.frameSize.x) - 1;
+    floor->bounds.width = (int)((camera->target.x + (GetScreenWidth() / 2.0f / camera->zoom)) / floor->sprite.frameSize.x) + 1;
+    floor->bounds.y = (int)((camera->target.y - (GetScreenHeight() / 2.0f / camera->zoom)) / floor->sprite.frameSize.y) - 1;
+    floor->bounds.height = (int)((camera->target.y + (GetScreenHeight() / 2.0f / camera->zoom)) / floor->sprite.frameSize.y) + 1;
 }
 
-void RenderFloor(Floor *Floor){
-    for (int y = (int)Floor->bounds.y; y <= (int)Floor->bounds.height; y++)
+void RenderFloor(Floor *floor){
+    for (int y = (int)floor->bounds.y; y <= (int)floor->bounds.height; y++)
         {
-            for (int x = (int)Floor->bounds.x; x <= (int)Floor->bounds.width; x++)
+            for (int x = (int)floor->bounds.x; x <= (int)floor->bounds.width; x++)
             {
-                Vector2 floorPosition = {x * Floor->sprite.frameSize.x, y * Floor->sprite.frameSize.y};
-                UpdateSpriteDestRec(&Floor->sprite, &floorPosition);
-                RenderSprite(&Floor->sprite);  
+                Vector2 floorPosition = {x * floor->sprite.frameSize.x, y * floor->sprite.frameSize.y};
+                UpdateSpriteDestRec(&floor->sprite, &floorPosition);
+                RenderSprite(&floor->sprite);  
             }
         }
 }
