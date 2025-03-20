@@ -1,5 +1,5 @@
 COMPILER = gcc
-C_FLAGS = -std=c99 -g -Wall -Werror -Wpedantic -Wshadow -Wstrict-prototypes
+C_FLAGS = -std=c99 -g -Wall -Werror -Wpedantic -Wshadow -Wstrict-prototypes -Wno-unknown-pragmas
 
 ifeq ($(OS), Windows_NT)
 	SRC = src\main.c
