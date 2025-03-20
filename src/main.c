@@ -1,5 +1,5 @@
 #include <raylib.h>
-#include <raymath.h>
+#include "../include/raymath.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "engine/screen.h"
@@ -20,7 +20,7 @@ typedef struct {
 int main(void)
 {
     Application app;
-    app.state.currentScreen = GAMEPLAY;
+    app.state.currentScreen = LOGO;
     app.state.running = true;
     app.state.gameStarted = false;
     app.display.name = "The Last Hive";
