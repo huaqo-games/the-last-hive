@@ -18,4 +18,4 @@ clean:
 	rm -f $(TARGET)
 
 run: clean build
-	.\$(TARGET)
+	./$(TARGET)

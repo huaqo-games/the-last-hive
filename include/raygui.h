@@ -1,3 +1,6 @@
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 /*******************************************************************************************
 *
 *   raygui v4.5-dev - A simple and easy-to-use immediate-mode gui library
@@ -5926,3 +5929,4 @@ static int GetCodepointNext(const char *text, int *codepointSize)
 #endif      // RAYGUI_STANDALONE
 
 #endif      // RAYGUI_IMPLEMENTATION
+#pragma clang diagnostic pop
