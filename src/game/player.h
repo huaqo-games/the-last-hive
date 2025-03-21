@@ -23,8 +23,9 @@ typedef struct {
     Physics physics;
 } Player;
 
-Player CreatePlayer(Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 startPosition, float rotation, float speed){
+Player CreatePlayer(PlayerState state,Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 startPosition, float rotation, float speed){
     return (Player){
+        .state = state,
         .sprite = {
             .texture = texture,
             .frameSize = {frameWidth, frameWidth},

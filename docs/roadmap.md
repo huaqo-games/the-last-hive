@@ -1,0 +1,2 @@
+- enums for other assets
+- 

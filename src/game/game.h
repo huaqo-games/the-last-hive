@@ -60,7 +60,7 @@ void InitGame(GameState* g, Display *display){
     g->textures[GRASS] = LoadTexture(g->textureAssets[GRASS].path);
     g->textures[HIVE] = LoadTexture(g->textureAssets[HIVE].path);
 
-    g->player = CreatePlayer(g->textures[PLAYER], g->textureAssets[PLAYER].frameWidth, 4, 5, g->hive.position, g->textureAssets[PLAYER].rotation, 50.0f);
+    g->player = CreatePlayer(IDLE_DOWN, g->textures[PLAYER], g->textureAssets[PLAYER].frameWidth, 4, 5, g->hive.position, g->textureAssets[PLAYER].rotation, 50.0f);
     g->flowers = CreateFlowers(g->textures[FLOWER], g->textureAssets[FLOWER].frameWidth, g->textureAssets[FLOWER].rotation, 50.0f);    
     g->floor = CreateFloor(g->textures[GRASS], g->textureAssets[GRASS].frameWidth);
     g->hive = CreateHive(g->textures[HIVE], g->textureAssets[HIVE].frameWidth);
