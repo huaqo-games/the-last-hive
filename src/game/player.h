@@ -29,7 +29,7 @@ Player CreatePlayer(PlayerState state,Texture2D texture, float frameWidth, int m
         .sprite = {
             .texture = texture,
             .frameSize = {frameWidth, frameWidth},
-            .sourceRec = {0.0f,0.0f, frameWidth, frameWidth},
+            .sourceRec = {0.0f, 0.0f, frameWidth, frameWidth},
             .destRec = {0.0f, 0.0f, frameWidth, frameWidth},
             .origin = {frameWidth / 2, frameWidth / 2},
             .rotation = rotation,
