@@ -25,7 +25,6 @@ void UpdateMouse(Mouse *mouse, Camera2D *camera) {
     mouse->leftButton = IsMouseButtonDown(MOUSE_LEFT_BUTTON);
     mouse->rightButton = IsMouseButtonDown(MOUSE_RIGHT_BUTTON);
     
-    // Calculate zoom scale factor
     mouse->wheelMove = GetMouseWheelMove();
     if (mouse->wheelMove != 0) {
         float zoomFactor = 1.0f + (mouse->zoomSpeed * fabsf(mouse->wheelMove));
