@@ -96,8 +96,8 @@ void RenderComponents(GameState* g){
     RenderFloor(&g->floor);
     RenderSprite(&g->hive.sprite);
     RenderObjectArray(&g->flowers);
-    RenderSprite(&g->bee1.sprite);
     RenderSprite(&g->player.sprite);
+    RenderSprite(&g->bee1.sprite);
 }
 
 void RenderGame(GameState* g){
