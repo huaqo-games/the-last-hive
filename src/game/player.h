@@ -6,26 +6,51 @@
 #include "../engine/input.h"
 
 typedef enum {
-    IDLE_UP,
-    IDLE_LEFT,
-    IDLE_DOWN,
-    IDLE_RIGHT,
-    WALKING_UP,
-    WALKING_LEFT,
-    WALKING_DOWN,
-    WALKING_RIGHT
+    IDLE,
+    WALKING,
+    USING_TOOL
 } PlayerState;
 
+typedef enum {
+    NO_TOOL,
+    HOE,
+    AXT,
+    CAN
+} SelectedTool;
+
+typedef enum {
+    IDLE_DOWN,
+    IDLE_UP,
+    IDLE_RIGHT,
+    IDLE_LEFT,
+    WALKING_DOWN,
+    WALKING_UP,
+    WALKING_RIGHT,
+    WALKING_LEFT,
+    HOE_DOWN,
+    HOE_UP,
+    HOE_RIGHT,
+    HOE_LEFT,
+    AXT_DOWN,
+    AXT_UP,
+    AXT_RIGHT,
+    AXT_LEFT,
+    CAN_DOWN,
+    CAN_UP,
+    CAN_RIGHT,
+    CAN_LEFT,
+} PlayerAnimationState;
+
 typedef struct {
-    PlayerState state;
+    SelectedTool selectedTool;
     Sprite sprite;
     Animation animation;
     Physics physics;
 } Player;
 
-Player CreatePlayer(PlayerState state,Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 startPosition, float rotation, float speed){
+Player CreatePlayer(PlayerAnimationState animState, SelectedTool selectedTool, Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 startPosition, float rotation, float speed){
     return (Player){
-        .state = state,
+        .selectedTool = selectedTool,
         .sprite = {
             .texture = texture,
             .frameSize = {frameWidth, frameWidth},
@@ -36,6 +61,7 @@ Player CreatePlayer(PlayerState state,Texture2D texture, float frameWidth, int m
             .color = WHITE
         },
         .animation = {
+            .state = animState,
             .currentFrame = 0,
             .maxFrame = maxFrame,
             .framesCounter = 0,
@@ -50,7 +76,24 @@ Player CreatePlayer(PlayerState state,Texture2D texture, float frameWidth, int m
     };
 }
 
-void UpdatePlayerState(PlayerState *state, Vector2 *dir) {
+void UpdatePlayerAnimationState(int *state, SelectedTool *selectedTool, Vector2 *dir) {
+
+    if (IsKeyPressed(KEY_ZERO)){
+        *selectedTool = NO_TOOL;
+    }
+
+    if (IsKeyPressed(KEY_ONE)){
+        *selectedTool = HOE;
+    }
+
+    if (IsKeyPressed(KEY_TWO)){
+        *selectedTool = AXT;
+    }
+
+    if (IsKeyPressed(KEY_THREE)){
+        *selectedTool = CAN;
+    }
+
     if (dir->x == 0 && dir->y == 0) {
         switch (*state) {
             case WALKING_DOWN:  *state = IDLE_DOWN; break;
@@ -69,11 +112,11 @@ void UpdatePlayerState(PlayerState *state, Vector2 *dir) {
 
 void UpdatePlayer(Player* player){
     Vector2 dir = GetDirectionVector();
-    UpdatePlayerState(&player->state, &dir);
+    UpdatePlayerAnimationState(&player->animation.state, &player->selectedTool, &dir);
     UpdatePhysics(&player->physics, dir);
     UpdateSpriteDestRec(&player->sprite, &player->physics.position);
     UpdateAnimation(&player->animation, GetFrameTime());
-    UpdateSpriteSourceRec(&player->sprite, &(Vector2){player->sprite.frameSize.x * player->state, player->sprite.frameSize.y * player->animation.currentFrame});
+    UpdateSpriteSourceRec(&player->sprite, &(Vector2){player->sprite.frameSize.x * player->animation.currentFrame, player->sprite.frameSize.y  * player->animation.state});
 }
 
 #endif // PLAYER_H
