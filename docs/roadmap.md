@@ -1,6 +1,9 @@
-- enums for other assets
-- Player animation for tools and switching
-- Timer Class (init, activate, deactivate, update) for the engine and for player animation with tools 53:50 https://www.youtube.com/watch?v=T4IX36sP_0c&t=1924s
-- Change UI textures
-- Change Map texture and change to non procedural map
-- Gameplay UI 
+- [x] enums for other assets
+- [ ] Player animation for tools and switching
+- [ ] Timer Class (init, activate, deactivate, update) for the engine and for player animation with tools 53:50 https://www.youtube.com/watch?v=T4IX36sP_0c&t=1924s
+- [ ] Change UI textures
+- [ ] Change Map texture and change to non procedural map (Tilemap with tiled and tmx)
+- [ ] Gameplay UI 
+- [ ] Init values should be stored in a seperate file and loaded. When clicking new game game should reload all init values
+- [ ] Create layers enum and render layers in their order. removes code order rendering. Group same layer (z) height object in one layer
+- [ ] Fix asset include rotation temporary fix with 180
