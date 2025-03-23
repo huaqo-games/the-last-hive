@@ -1,0 +1,14 @@
+#ifndef MENUASSETS_H
+#define MENUASSETS_H
+#include "../engine/asset.h"
+
+typedef enum {
+    BIG_BUTTONS,
+    MENU_TEX_COUNT
+} MenuTextureID;
+
+const TextureAsset menuTextureAssets[MENU_TEX_COUNT] = {
+    {"assets/SproutLandsUI/Spritesheets/UIBigPlayButton.png", 96.0f, 32.0f, 180.0f}
+};
+
+#endif // MENUASSETS_H
