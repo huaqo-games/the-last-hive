@@ -20,7 +20,7 @@ typedef struct {
 int main(void)
 {
     Application app;
-    app.state.currentScreen = LOGO;
+    app.state.currentScreen = MENU;
     app.state.running = true;
     app.state.gameStarted = false;
     app.display.name = "The Last Hive";
@@ -28,7 +28,10 @@ int main(void)
     app.display.height = 720;
 
     InitWindow(app.display.width, app.display.height, app.display.name); 
-
+    InitAudioDevice(); 
+    
+    SetTraceLogLevel(LOG_NONE);
+    
     InitLogo(&app.logo);
     InitMenu(&app.menu);
     InitGame(&app.game,&app.display);
