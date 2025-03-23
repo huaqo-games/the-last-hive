@@ -8,4 +8,18 @@ typedef struct {
     float rotation;
 } TextureAsset;
 
+typedef struct {
+    const char* path;
+} ShaderAsset;
+
+typedef struct {
+    const char* path;
+} SoundtrackAsset;
+
+typedef struct {
+    const TextureAsset *textureAssets;
+    const ShaderAsset *shaderAssets;
+    const SoundtrackAsset *soundtrackAssets;
+} Assets;
+
 #endif // ASSET_H
