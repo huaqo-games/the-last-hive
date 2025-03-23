@@ -1,7 +1,8 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-typedef struct {    
+typedef struct {   
+    int state;
     int currentFrame;       
     int maxFrame;           
     int framesCounter;      
