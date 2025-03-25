@@ -63,7 +63,7 @@ void InitGame(GameState* g, Display *display){
     g->bee1 = CreateBee(FLYING, g->textures[BEE], g->assets.textureAssets[BEE].frameWidth, 4, 10, g->hive.position, 10.0f, &g->flowers, &g->hive);
     
     // I/O
-    g->camera = CreateCamera(display->width, display->height, g->player.physics.position, 5.0f);
+    g->camera = CreateCamera(display->width, display->height, g->player.physics.position, 10.0f);
     g->mouse = CreateMouse(0.10f, 5.0f, 10.0f);
 
 }

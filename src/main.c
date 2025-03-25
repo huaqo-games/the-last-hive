@@ -9,9 +9,11 @@
 #include "game/menu.h"
 #include "game/game.h"
 
+
 typedef struct {
     State state;
     Display display;
+    Font font;
     LogoState logo;
     GameState game;
     MenuState menu;
@@ -19,17 +21,23 @@ typedef struct {
 
 int main(void)
 {
+    Display display = {
+        .name = "The Last Hive",
+        .width = 1280,
+        .height = 720
+    };
+
+    InitWindow(display.width, display.height, display.name); 
+    InitAudioDevice(); 
+
     Application app;
     app.state.currentScreen = MENU;
     app.state.running = true;
     app.state.gameStarted = false;
-    app.display.name = "The Last Hive";
-    app.display.width = 1280;
-    app.display.height = 720;
+    app.display = display;
+    app.font = LoadFont("assets/SproutLandsUI/fonts/pixelFont-7-8x14-sproutLands.fnt");
 
-    InitWindow(app.display.width, app.display.height, app.display.name); 
-    InitAudioDevice(); 
-    
+    SetTextureFilter(app.font.texture, TEXTURE_FILTER_POINT);
     SetTraceLogLevel(LOG_NONE);
     
     InitLogo(&app.logo);
@@ -48,7 +56,7 @@ int main(void)
             case MENU:
             {
                 UpdateMenu(&app.menu, &app.state);
-                RenderMenu(&app.menu);
+                RenderMenu(&app.menu, &app.font, app.display.name);
             }break;
             case GAMEPLAY:
             {
@@ -59,6 +67,7 @@ int main(void)
         } 
     }
     CleanupGame(&app.game);
+    UnloadFont(app.font);
     CloseWindow();
     return 0;
 }

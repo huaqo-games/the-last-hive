@@ -6,14 +6,14 @@
 #include "../engine/asset.h"
 #include "../engine/gamegui.h"
 #include "menuassets.h"
+#include "colors.h"
 
 typedef struct {
     Assets assets;
     Texture2D textures[MENU_TEX_COUNT];
-    Button startButton;
-    Button quitButton;
-    ImageButton newStartButton;
-    ImageButton newQuitButton;
+    ImageElement board;
+    ImageButton playButton;
+    ImageButton quitButton;
 } MenuState;
 
 void InitMenu(MenuState *m){
@@ -23,75 +23,75 @@ void InitMenu(MenuState *m){
     for (int i = 0; i < MENU_TEX_COUNT; i++){
         m->textures[i] = LoadTexture(m->assets.textureAssets[i].path);
     }
+    int menuScale = 4;
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+    Vector2 screenCenter = {screenWidth / 2, screenHeight / 2};
 
-    Rectangle startButtonBounds = {
-        GetScreenWidth() / 2 - (GetScreenWidth() / 10) / 2,
-        GetScreenHeight() / 2 - (GetScreenHeight() / 20) / 2,
-        GetScreenWidth() / 10,
-        GetScreenHeight() / 20
+    int boardWidth = screenWidth / menuScale * 3.0f;
+    float boardScaleFactor = (float)boardWidth / m->assets.textureAssets[BOARD].frameWidth;
+    int boardHeight = (int)(m->assets.textureAssets[BOARD].frameHeight * boardScaleFactor);
+    
+    Vector2 boardSource = {128.0f,0.0f};
+    Rectangle boardDestRec = {
+        .x = screenCenter.x - (boardWidth / 2),
+        .y = screenCenter.y - (boardHeight / 2),
+        .width = boardWidth,
+        .height = boardHeight
     };
 
-    Rectangle quitButtonBounds = {
-        GetScreenWidth() / 2 - (GetScreenWidth() / 10) / 2,
-        GetScreenHeight() / 2 + (GetScreenHeight() / 10) / 2,
-        GetScreenWidth() / 10,
-        GetScreenHeight() / 20
+    m->board = CreateImageElement(&m->textures[BOARD], &m->assets.textureAssets[BOARD], &boardSource, &boardDestRec);
+    
+    int buttonWidth = screenWidth / menuScale;
+    float buttonScaleFactor = (float)buttonWidth / m->assets.textureAssets[BIG_BUTTONS].frameWidth;
+    int buttonHeight = (int)(m->assets.textureAssets[BIG_BUTTONS].frameHeight * buttonScaleFactor);
+    int buttonSpacing = buttonHeight;
+
+    Vector2 playButtonNotPressed = { 0.0f, 96.0f};
+    Vector2 quitButtonNotPressed = { 0.0f, 0.0f};
+    Vector2 playButtonPressed = { 96.0f, 96.0f};
+    Vector2 quitButtonPressed = { 96.0f, 0.0f};
+
+    Rectangle playButtonDestRec = {
+        .x = screenCenter.x - (buttonWidth / 2),
+        .y = screenCenter.y - (buttonHeight / 2),
+        .width = buttonWidth,
+        .height = buttonHeight 
     };
 
-    Rectangle playTexRecs[2] = {
-        { 0.0f, 96.0f, m->assets.textureAssets[BIG_BUTTONS].frameWidth, m->assets.textureAssets[BIG_BUTTONS].frameHeight },
-        { m->assets.textureAssets[BIG_BUTTONS].frameWidth, 96.0f, m->assets.textureAssets[BIG_BUTTONS].frameWidth, m->assets.textureAssets[BIG_BUTTONS].frameHeight }
+    Rectangle quitButtonDestRec = {
+        .x = screenCenter.x - (buttonWidth / 2),
+        .y = screenCenter.y - (buttonHeight / 2) + buttonSpacing,
+        .width = buttonWidth,
+        .height = buttonHeight
     };
 
-    Rectangle emptyTexRecs[2] = {
-        { 0.0f, 0.0f, m->assets.textureAssets[BIG_BUTTONS].frameWidth, m->assets.textureAssets[BIG_BUTTONS].frameHeight },
-        { m->assets.textureAssets[BIG_BUTTONS].frameWidth, 0.0f, m->assets.textureAssets[BIG_BUTTONS].frameWidth, m->assets.textureAssets[BIG_BUTTONS].frameHeight }
-    };
 
-    initImageButton(&m->newStartButton, playTexRecs, startButtonBounds, m->textures[BIG_BUTTONS]);
-    initImageButton(&m->newQuitButton, emptyTexRecs, quitButtonBounds, m->textures[BIG_BUTTONS]);
-    // initButton(&m->startButton, "Start Game", GetScreenWidth() / 10, GetScreenHeight() / 20, GetScreenWidth() / 2, GetScreenHeight() / 2);
-    // initButton(&m->quitButton, "Quit Game", GetScreenWidth() / 10, GetScreenHeight() / 20, GetScreenWidth() / 2,
-    //         GetScreenHeight() / 2 + (GetScreenHeight() / 20 * 2));
+    m->playButton = CreateImageButton(NOT_CLICKED, &m->textures[BIG_BUTTONS], &m->assets.textureAssets[BIG_BUTTONS], &playButtonNotPressed, &playButtonPressed, &playButtonDestRec);
+    m->quitButton = CreateImageButton(NOT_CLICKED, &m->textures[BIG_BUTTONS], &m->assets.textureAssets[BIG_BUTTONS], &quitButtonNotPressed, &quitButtonPressed, &quitButtonDestRec);
 }
 
 void UpdateMenu(MenuState *m, State *state){
 
-    if (isImageButtonClicked(&m->newStartButton)){
+    if (isImageButtonClicked(&m->playButton)){
         state->gameStarted = true;
-        m->startButton.text = "Continue";
         state->currentScreen = GAMEPLAY;
     }
 
-    if (isImageButtonClicked(&m->newQuitButton) || (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))) {
+    if (isImageButtonClicked(&m->quitButton) || (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))) {
         state->running = false;
     }
 
-
-    // if (isButtonClicked(&m->startButton)) {
-    //     state->gameStarted = true;
-    //     m->startButton.text = "Continue";
-    //     state->currentScreen = GAMEPLAY;
-    // }
-    // if (isButtonClicked(&m->quitButton) || (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))) {
-    //     state->running = false;
-    // }
-
-    // if (state->gameStarted){
-    //     if (IsKeyPressed(KEY_ESCAPE)){
-    //         state->currentScreen = GAMEPLAY;
-    //     }
-    // }
-
 }
 
-void RenderMenu(MenuState *m){
+void RenderMenu(MenuState *m, Font *font, const char* name){
     BeginDrawing();
         ClearBackground(WHITE);
-        // renderButton(&m->startButton);
-        // renderButton(&m->quitButton);
-        renderImageButton(&m->newStartButton);
-        renderImageButton(&m->newQuitButton);
+        renderImageElement(&m->board);
+        renderImageButton(&m->playButton);
+        renderImageButton(&m->quitButton);
+        int textWidth = MeasureText(name, font->baseSize);
+        DrawTextEx(*font, name, (Vector2){ GetScreenWidth() / 2 - textWidth / 2, textWidth / 4}, (float)font->baseSize, 2, WHITE);
         DrawFPS(10, 10);
     EndDrawing();
 }
