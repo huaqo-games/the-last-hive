@@ -14,6 +14,7 @@ typedef struct
     Sprite sprite;
     Vector2 notClicked;
     Vector2 clicked;
+    bool isHovered;
 } ImageButton;
 
 typedef struct
@@ -72,18 +73,27 @@ void PrintImageButton(const ImageButton btn) {
     printf("  clicked: x = %f, y = %f\n", btn.clicked.x, btn.clicked.y);
 }
 
-int isImageButtonClicked(ImageButton *b){
+int isImageButtonClicked(ImageButton *b, Sound soundHover, Sound soundClick){
     if (CheckCollisionPointRec(GetMousePosition(), b->sprite.destRec)) {
+
+        if (!b->isHovered) {
+            PlaySound(soundHover);
+            b->isHovered = true;
+        }
+
         if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)){
             UpdateSpriteSourceRec(&b->sprite, &b->clicked);
         }
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) 
         {
+            PlaySound(soundClick);
+            b->isHovered = false;
             UpdateSpriteSourceRec(&b->sprite, &b->notClicked);
             return true;
         }
     } else {
         UpdateSpriteSourceRec(&b->sprite, &b->notClicked);
+        b->isHovered = false;
     }
     return false;
 }

@@ -11,18 +11,27 @@
 typedef struct {
     Assets assets;
     Texture2D textures[MENU_TEX_COUNT];
+    Sound sounds[MENU_SOUND_COUNT];
     ImageElement board;
     ImageButton playButton;
     ImageButton quitButton;
 } MenuState;
 
 void InitMenu(MenuState *m){
+
     m->assets = (Assets){
-        .textureAssets = menuTextureAssets
+        .textureAssets = menuTextureAssets,
+        .soundAssets = menuSoundAssets
     };
+
     for (int i = 0; i < MENU_TEX_COUNT; i++){
         m->textures[i] = LoadTexture(m->assets.textureAssets[i].path);
     }
+
+    for (int i = 0; i < MENU_SOUND_COUNT; i++){
+        m->sounds[i] = LoadSound(m->assets.soundAssets[i].path);
+    }
+
     int menuScale = 4;
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
@@ -73,12 +82,12 @@ void InitMenu(MenuState *m){
 
 void UpdateMenu(MenuState *m, State *state){
 
-    if (isImageButtonClicked(&m->playButton)){
+    if (isImageButtonClicked(&m->playButton, m->sounds[HOVER_SOUND], m->sounds[CLICK_SOUND])){
         state->gameStarted = true;
         state->currentScreen = GAMEPLAY;
     }
 
-    if (isImageButtonClicked(&m->quitButton) || (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))) {
+    if (isImageButtonClicked(&m->quitButton, m->sounds[HOVER_SOUND], m->sounds[CLICK_SOUND]) || (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))) {
         state->running = false;
     }
 
@@ -97,6 +106,7 @@ void RenderMenu(MenuState *m, Font *font, const char* name){
 }
 
 void CleanupMenu(MenuState *m){
+    for (int i = 0; i < MENU_SOUND_COUNT; i++){ UnloadSound(m->sounds[i]); }
     for (int i = 0; i < MENU_TEX_COUNT; i++){ if (m->textures[i].id > 0) { UnloadTexture(m->textures[i]); } }
 }
 

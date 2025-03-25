@@ -9,7 +9,6 @@
 #include "game/menu.h"
 #include "game/game.h"
 
-
 typedef struct {
     State state;
     Display display;
@@ -31,7 +30,7 @@ int main(void)
     InitAudioDevice(); 
 
     Application app;
-    app.state.currentScreen = MENU;
+    app.state.currentScreen = LOGO;
     app.state.running = true;
     app.state.gameStarted = false;
     app.display = display;

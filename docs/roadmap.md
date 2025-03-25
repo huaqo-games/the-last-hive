@@ -7,3 +7,4 @@
 - [ ] Init values should be stored in a seperate file and loaded. When clicking new game game should reload all init values
 - [ ] Create layers enum and render layers in their order. removes code order rendering. Group same layer (z) height object in one layer
 - [ ] Fix asset include rotation temporary fix with 180
+- [x] Custom Font and Title in Menu
