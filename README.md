@@ -1,3 +1,0 @@
-Make 4.4.1
-GCC 14.2
-RAYLIB 5.5
