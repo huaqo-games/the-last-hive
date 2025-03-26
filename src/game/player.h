@@ -4,6 +4,7 @@
 #include "../engine/animation.h"
 #include "../engine/physics.h"
 #include "../engine/input.h"
+#include "inventar.h"
 
 typedef enum {
     IDLE,
@@ -46,6 +47,7 @@ typedef struct {
     Sprite sprite;
     Animation animation;
     Physics physics;
+    Inventar inventar;
 } Player;
 
 Player CreatePlayer(PlayerAnimationState animState, SelectedTool selectedTool, Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 startPosition, float rotation, float speed){
@@ -72,6 +74,9 @@ Player CreatePlayer(PlayerAnimationState animState, SelectedTool selectedTool, T
             .position = startPosition,
             .direction = (Vector2){0.0f,0.0f},
             .speed = speed
+        },
+        .inventar = {
+            .seedCount = 6
         }
     };
 }
@@ -111,6 +116,9 @@ void UpdatePlayerAnimationState(int *state, SelectedTool *selectedTool, Vector2 
 }
 
 void UpdatePlayer(Player* player){
+    if (IsKeyPressed(KEY_SPACE) && player->inventar.seedCount >0){
+        player->inventar.seedCount--;
+    } 
     Vector2 dir = GetDirectionVector();
     UpdatePlayerAnimationState(&player->animation.state, &player->selectedTool, &dir);
     UpdatePhysics(&player->physics, dir);

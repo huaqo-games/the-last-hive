@@ -82,6 +82,7 @@ void UpdateGame(GameState* g, State *state){
     UpdateFloor(&g->floor, &g->camera);
     UpdatePlayer(&g->player);
     UpdateBee(&g->bee1, &g->flowers, &g->hive);
+    
 
 }
 
@@ -91,6 +92,7 @@ void RenderComponents(GameState* g){
     RenderObjectArray(&g->flowers);
     RenderSprite(&g->player.sprite);
     RenderSprite(&g->bee1.sprite);
+    
 }
 
 void RenderGame(GameState* g){
@@ -106,7 +108,8 @@ void RenderGame(GameState* g){
         for (int i = 0; i < SHADER_COUNT; i++){
             RenderPostFX(&g->postFX[i], &g->target);    
         }
-        DrawFPS(10, 10);
+        DrawText( TextFormat("%d", g->player.inventar.seedCount), 10, 10, 50, WHITE);
+        //DrawFPS(10, 10);
     EndDrawing();
 }
 
