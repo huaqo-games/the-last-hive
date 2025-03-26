@@ -64,7 +64,9 @@ void InitGame(GameState* g, Display *display){
     
     // I/O
     g->camera = CreateCamera(display->width, display->height, g->player.physics.position, 10.0f);
-    g->mouse = CreateMouse(0.10f, 5.0f, 10.0f);
+    
+    
+    g->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &g->textures[CURSOR]);
 
 }
 
@@ -97,6 +99,7 @@ void RenderGame(GameState* g){
         BeginMode2D(g->camera);
             RenderComponents(g);
         EndMode2D();
+        DrawTextureRec(g->mouse.cursorTexture, (Rectangle){ 0, 0, g->mouse.cursorTexture.width, -g->mouse.cursorTexture.height }, (Vector2){ g->mouse.screenPosition.x, GetScreenHeight() - g->mouse.screenPosition.y - g->mouse.cursorTexture.height}, WHITE);        
     EndTextureMode();
     BeginDrawing();
         ClearBackground(BLACK);
