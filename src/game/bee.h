@@ -5,6 +5,9 @@
 #include "../engine/physics.h"
 #include "../engine/object.h"
 
+typedef enum {
+    FLYING
+} BeeAnimationState;
 
 typedef struct {
     Sprite sprite;
@@ -15,7 +18,7 @@ typedef struct {
     int flowerCount;
 } Bee;
 
-Bee CreateBee(Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 position, float speed, ObjectArray* target, Object* base){
+Bee CreateBee(BeeAnimationState animState, Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 position, float speed, ObjectArray* target, Object* base){
     return (Bee){
         .sprite = {
             .texture = texture,
@@ -27,6 +30,7 @@ Bee CreateBee(Texture2D texture, float frameWidth, int maxFrame, int framesSpeed
             .color = WHITE
         },
         .animation = {
+            .state = animState,
             .currentFrame = 0,
             .maxFrame = maxFrame,
             .framesCounter = 0,
@@ -66,7 +70,7 @@ void UpdateBee(Bee* bee, ObjectArray* flowers, Object* hive){
     UpdateSpriteRotation(&bee->sprite, &bee->physics.direction);
     UpdateSpriteDestRec(&bee->sprite, &bee->physics.position);
     UpdateAnimation(&bee->animation, GetFrameTime());
-    UpdateSpriteSourceRec(&bee->sprite, &(Vector2){bee->sprite.frameSize.x, bee->sprite.frameSize.x * bee->animation.currentFrame});
+    UpdateSpriteSourceRec(&bee->sprite, &(Vector2){bee->sprite.frameSize.x * bee->animation.state, bee->sprite.frameSize.x * bee->animation.currentFrame});
 }
 
 #endif // BEE_H

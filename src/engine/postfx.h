@@ -8,7 +8,7 @@ typedef struct {
     float strength;
 } PostProcessing;
 
-PostProcessing CreatePostFX(const char* shaderPath, float strength){
+PostProcessing CreatePostFX(const char* shaderPath){
     PostProcessing postFX = {0};
     postFX.shader = LoadShader(NULL, shaderPath);
 
@@ -17,7 +17,7 @@ PostProcessing CreatePostFX(const char* shaderPath, float strength){
         return postFX;
     }
 
-    postFX.strength = strength;
+    postFX.strength = 0.3f;
     postFX.resolutionLoc = GetShaderLocation(postFX.shader, "resolution");
     postFX.strengthLoc = GetShaderLocation(postFX.shader, "strength");
     Vector2 resolution = { (float)GetScreenWidth(), (float)GetScreenHeight() };

@@ -2,6 +2,7 @@
 #define INPUT_H
 
 typedef struct {
+    Vector2 screenPosition;
     Vector2 worldPosition;
     float zoomSpeed;
     float minZoom;
@@ -10,22 +11,31 @@ typedef struct {
     float wheelMove;
     bool leftButton;
     bool rightButton;
+    Texture2D cursorTexture;
 } Mouse;
 
-Mouse CreateMouse(float zoomSpeed, float minZoom, float maxZoom){
+Mouse CreateMouse(float zoomSpeed, float minZoom, float maxZoom, Texture2D *texture){
+    HideCursor();
     return (Mouse){
         .zoomSpeed = zoomSpeed,
         .minZoom = minZoom,
-        .maxZoom = maxZoom
+        .maxZoom = maxZoom,
+        .cursorTexture = *texture
     };
 }
 
+void UpdateMouseScreen(Mouse *mouse){
+    mouse->screenPosition = GetMousePosition();
+
+}
+
 void UpdateMouse(Mouse *mouse, Camera2D *camera) {
+
+    mouse->screenPosition = GetMousePosition();
     mouse->worldPosition = GetScreenToWorld2D(GetMousePosition(), *camera);
     mouse->leftButton = IsMouseButtonDown(MOUSE_LEFT_BUTTON);
     mouse->rightButton = IsMouseButtonDown(MOUSE_RIGHT_BUTTON);
     
-    // Calculate zoom scale factor
     mouse->wheelMove = GetMouseWheelMove();
     if (mouse->wheelMove != 0) {
         float zoomFactor = 1.0f + (mouse->zoomSpeed * fabsf(mouse->wheelMove));

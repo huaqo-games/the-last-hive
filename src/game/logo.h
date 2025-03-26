@@ -110,6 +110,8 @@ void RenderLogo(const LogoState *l) {
             DrawText(TextSubtext("raylib", 0, l->lettersCount), GetScreenWidth() / 2 - 44, GetScreenHeight() / 2 + 48, 50, Fade(BLACK, l->alpha));
         } 
 
+        DrawFPS(10, 10);
+
     EndDrawing();
 }
 
