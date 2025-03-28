@@ -1,40 +1,58 @@
-name: Release macOS Build
+name: Build & Release on macOS
 
+# Run on *every push* to "main," and also build on PRs (but only create the release on push).
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 permissions:
-  contents: write
+  contents: write  # needed so the workflow can create a tag & release
 
 jobs:
   build-and-release-macos:
     runs-on: macos-latest
     steps:
-      - name: Check out source code
+      - name: Check out source
         uses: actions/checkout@v3
 
-      - name: Install dependencies (Homebrew & raylib)
+      - name: Install Dependencies (Homebrew & raylib)
         run: |
           brew update
           brew install raylib pkg-config
 
       - name: Build
+        # Your Makefile from the question
         run: make build
 
-      - name: Create GitHub Release
+      - name: Create Tag & GitHub Release
+        # Only create a release when it's a push (not a pull_request)
+        if: ${{ github.event_name == 'push' }}
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: ${{ github.ref_name }}
+          # You need a unique tag each time to avoid "already_exists" errors.
+          # Here we'll name the tag like "build-123" using the run_number,
+          # but you could do something like a date-based tag.
+          tag_name: build-${{ github.run_number }}
+
+          # The commit to tag. Usually, this is the push commit SHA:
+          commitish: ${{ github.sha }}
+
+          # The release name can match the tag or be more descriptive
+          release_name: "Automated build #${{ github.run_number }}"
+
+          # Adjust as needed; you could set these to false for a "final" release
           draft: false
-          prerelease: false
+          prerelease: true   # Mark as "pre-release" so it's clearly automated
 
       - name: Upload Release Asset
+        if: ${{ github.event_name == 'push' }}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
