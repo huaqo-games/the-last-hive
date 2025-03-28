@@ -34,7 +34,7 @@ void UpdatePostFX(PostProcessing *postFX){
 
 void RenderPostFX(PostProcessing *postFX, RenderTexture2D *target){
     BeginShaderMode(postFX->shader);
-        DrawTextureRec(target->texture, (Rectangle){ 0, 0, target->texture.width, target->texture.height }, (Vector2){ 0, 0 }, WHITE);
+        DrawTextureRec(target->texture, (Rectangle){ 0, 0, target->texture.width, -target->texture.height }, (Vector2){ 0, 0 }, WHITE);
     EndShaderMode();
 }
 

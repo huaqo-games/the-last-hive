@@ -49,8 +49,8 @@ Vector2 GetDirectionVector(void){
     Vector2 vector = {.x = 0.0f, .y = 0.0f};
     if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)){vector.x += 1.0f; }
     if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)){ vector.x -= 1.0f; }
-    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)){ vector.y += 1.0f; }
-    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)){ vector.y -= 1.0f; }
+    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)){ vector.y -= 1.0f; }
+    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)){ vector.y += 1.0f; }
     if (Vector2Length(vector) > 0.0f) {vector = Vector2Normalize(vector); }
     return vector;
 }

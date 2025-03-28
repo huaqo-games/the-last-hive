@@ -22,12 +22,12 @@ typedef enum {
 typedef enum {
     IDLE_DOWN,
     IDLE_UP,
-    IDLE_RIGHT,
     IDLE_LEFT,
+    IDLE_RIGHT,
     WALKING_DOWN,
     WALKING_UP,
-    WALKING_RIGHT,
     WALKING_LEFT,
+    WALKING_RIGHT,
     HOE_DOWN,
     HOE_UP,
     HOE_RIGHT,
@@ -103,15 +103,15 @@ void UpdatePlayerAnimationState(int *state, SelectedTool *selectedTool, Vector2 
         switch (*state) {
             case WALKING_DOWN:  *state = IDLE_DOWN; break;
             case WALKING_UP:    *state = IDLE_UP; break;
-            case WALKING_RIGHT: *state = IDLE_RIGHT; break;
             case WALKING_LEFT:  *state = IDLE_LEFT; break;
+            case WALKING_RIGHT: *state = IDLE_RIGHT; break;
             default: break;
         }
     } else {
-        if (dir->y == -1)      *state = WALKING_DOWN;
-        else if (dir->y == 1)  *state = WALKING_UP;
-        else if (dir->x == 1)  *state = WALKING_RIGHT;
+        if      (dir->y == 1)  *state = WALKING_DOWN;
+        else if (dir->y == -1) *state = WALKING_UP;
         else if (dir->x == -1) *state = WALKING_LEFT;
+        else if (dir->x == 1)  *state = WALKING_RIGHT;
     }
 }
 

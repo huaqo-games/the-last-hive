@@ -14,11 +14,11 @@ typedef enum {
 
 const TextureAsset menuTextureAssets[MENU_TEX_COUNT] = {
     {"assets/SproutLandsUI/Spritesheets/Mouse sprites/TriangleMouseicon1.png", 16.0f, 16.0f, 0.0f },
-    {"assets/SproutLandsUI/Spritesheets/UIBigPlayButtonHover.png", 96.0f, 32.0f, 180.0f},
-    {"assets/SproutLandsUI/Spritesheets/Settingmenu.png", 128.0f, 144.0f, 180.0f},
-    {"assets/Clouds/Clouds1/1.png", 576.0f, 324.0f, 180.0f},
-    {"assets/Clouds/Clouds1/2.png", 576.0f, 324.0f, 180.0f},
-    {"assets/Clouds/Clouds1/4.png", 576.0f, 324.0f, 180.0f}
+    {"assets/SproutLandsUI/Spritesheets/UIBigPlayButtonHover.png", 96.0f, 32.0f, 0.0f},
+    {"assets/SproutLandsUI/Spritesheets/Settingmenu.png", 128.0f, 144.0f, 0.0f},
+    {"assets/Clouds/Clouds1/1.png", 576.0f, 324.0f, 0.0f},
+    {"assets/Clouds/Clouds1/2.png", 576.0f, 324.0f, 0.0f},
+    {"assets/Clouds/Clouds1/4.png", 576.0f, 324.0f, 0.0f}
 };
 
 typedef enum {
