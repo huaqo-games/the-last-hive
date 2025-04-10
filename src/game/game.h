@@ -82,8 +82,6 @@ void UpdateGame(GameState* g, State *state){
     UpdateFloor(&g->floor, &g->camera);
     UpdatePlayer(&g->player);
     UpdateBee(&g->bee1, &g->flowers, &g->hive);
-    
-
 }
 
 void RenderComponents(GameState* g){
@@ -92,10 +90,9 @@ void RenderComponents(GameState* g){
     RenderObjectArray(&g->flowers);
     RenderSprite(&g->player.sprite);
     RenderSprite(&g->bee1.sprite);
-    
 }
 
-void RenderGame(GameState* g){
+void RenderGame(GameState* g, const State *appState){
     BeginTextureMode(g->target);
         ClearBackground(BLACK);
         BeginMode2D(g->camera);
@@ -109,7 +106,11 @@ void RenderGame(GameState* g){
             RenderPostFX(&g->postFX[i], &g->target);    
         }
         DrawText( TextFormat("%d", g->player.inventar.seedCount), 10, 10, 50, WHITE);
-        //DrawFPS(10, 10);
+        
+        if (appState->flagFPS){
+            DrawFPS(10, 10);
+        }
+
     EndDrawing();
 }
 

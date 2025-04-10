@@ -34,6 +34,7 @@ int main(void)
     app.state.currentScreen = LOGO;
     app.state.running = true;
     app.state.gameStarted = false;
+    app.state.flagFPS = true;
     app.display = display;
     app.font = LoadFont("assets/SproutLandsUI/fonts/pixelFont-7-8x14-sproutLands.fnt");
 
@@ -51,17 +52,17 @@ int main(void)
             case LOGO:
             {
                 UpdateLogo(&app.logo, &app.state);
-                RenderLogo(&app.logo);
+                RenderLogo(&app.logo, &app.state);
             }break;
             case MENU:
             {
                 UpdateMenu(&app.menu, &app.state);
-                RenderMenu(&app.menu, &app.font, app.display.name);
+                RenderMenu(&app.menu, &app.state, &app.font, app.display.name);
             }break;
             case GAMEPLAY:
             {
                 UpdateGame(&app.game, &app.state);
-                RenderGame(&app.game);
+                RenderGame(&app.game, &app.state);
             }break;
             default: break;
         } 

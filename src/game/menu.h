@@ -124,7 +124,7 @@ void UpdateMenu(MenuState *m, State *state){
 
 }
 
-void RenderMenu(MenuState *m, Font *font, const char* name){
+void RenderMenu(MenuState *m, State *appState,Font *font, const char* name){
     BeginDrawing();
         ClearBackground(WHITE);
         RenderBackground(&m->background);
@@ -142,8 +142,12 @@ void RenderMenu(MenuState *m, Font *font, const char* name){
             (Vector2){0.0f, 0.0f},
             0.0f,
             WHITE
-        );        
-        DrawFPS(10, 10);
+        );
+
+        if (appState->flagFPS){
+            DrawFPS(10, 10);
+        }
+        
     EndDrawing();
 }
 
