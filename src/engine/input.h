@@ -31,8 +31,9 @@ void UpdateMouseScreen(Mouse *mouse){
 
 void UpdateMouse(Mouse *mouse, Camera2D *camera) {
 
-    mouse->screenPosition = GetMousePosition();
-    mouse->worldPosition = GetScreenToWorld2D(GetMousePosition(), *camera);
+    Vector2 pos = GetMousePosition();
+    mouse->screenPosition = pos;
+    mouse->worldPosition = GetScreenToWorld2D(pos, *camera);
     mouse->leftButton = IsMouseButtonDown(MOUSE_LEFT_BUTTON);
     mouse->rightButton = IsMouseButtonDown(MOUSE_RIGHT_BUTTON);
     

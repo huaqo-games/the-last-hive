@@ -20,6 +20,7 @@ typedef struct {
 
 int main(void)
 {
+
     Display display = {
         .name = "The Last Hive",
         .width = 1280,
@@ -65,6 +66,7 @@ int main(void)
             default: break;
         } 
     }
+    CleanupMenu(&app.menu);
     CleanupGame(&app.game);
     UnloadFont(app.font);
     CloseWindow();

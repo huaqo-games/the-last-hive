@@ -151,7 +151,6 @@ void CleanupMenu(MenuState *m){
     for (int i = 0; i < MENU_SOUND_COUNT; i++){ UnloadSound(m->sounds[i]); }
     for (int i = 0; i < MENU_TEX_COUNT; i++){ if (m->textures[i].id > 0) { UnloadTexture(m->textures[i]); } }
     for (int i = 0; i < MENU_SOUNDTRACK_COUNT; i++){ UnloadMusicStream(m->soundtracks[i].music); }
-
 }
 
 #endif // MENU_H
