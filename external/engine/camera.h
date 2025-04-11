@@ -1,6 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
+
 #include "input.h" 
+#include <raymath.h>
 
 Camera2D CreateCamera(int screenWidth, int screenHeight, Vector2 playerPosition, float initZoom){
     return (Camera2D){

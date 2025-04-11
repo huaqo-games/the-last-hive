@@ -1,10 +1,11 @@
 #ifndef GAMEASSETS_H
 #define GAMEASSETS_H
-#include "../engine/asset.h"
+#include <asset.h>
 
 ////////////////////////////////////////////////////////////////////////////
 
-typedef enum {
+typedef enum
+{
     PLAYER,
     PLAYER_ACTIONS,
     TOOLS,
@@ -24,31 +25,29 @@ const TextureAsset texAssets[TEX_COUNT] = {
     {"assets/character_bee.png", 16.0f, 16.0f, 0.0f},
     {"assets/grass.png", 16.0f, 16.0f, 0.0f},
     {"assets/hive.png", 32.0f, 32.0f, 0.0f},
-    {"assets/SproutLandsUI/Spritesheets/Mouse sprites/TriangleMouseicon1.png", 16.0f, 16.0f, 0.0f }
-};
+    {"assets/SproutLandsUI/Spritesheets/Mouse sprites/TriangleMouseicon1.png", 16.0f, 16.0f, 0.0f}};
 
 ////////////////////////////////////////////////////////////////////////////
 
-typedef enum {
+typedef enum
+{
     POST_FX,
     SHADER_COUNT
 } ShaderID;
 
-
 const ShaderAsset shaderAssets[SHADER_COUNT] = {
-    {"shaders/postfx.fs"}
-};
+    {"shaders/postfx.fs"}};
 
 ////////////////////////////////////////////////////////////////////////////
 
-typedef enum {
+typedef enum
+{
     BEE_AMBIENT,
     SOUNDTRACK_COUNT
 } SoundtrackID;
 
 const SoundtrackAsset soundtrackAssets[SOUNDTRACK_COUNT] = {
-    {"assets/beez.mp3"}
-};
+    {"assets/beez.mp3"}};
 
 ////////////////////////////////////////////////////////////////////////////
 

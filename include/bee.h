@@ -1,9 +1,9 @@
 #ifndef BEE_H
 #define BEE_H
-#include "../engine/sprite.h"
-#include "../engine/animation.h"
-#include "../engine/physics.h"
-#include "../engine/object.h"
+#include <sprite.h>
+#include <animation.h>
+#include <physics.h>
+#include <object.h>
 
 typedef enum {
     FLYING

@@ -3,8 +3,8 @@
 
 typedef enum Screen {
     LOGO = 0,
-    MENU,
-    GAMEPLAY
+    MENU = 1,
+    GAMEPLAY = 2
 } Screen;
 
 #endif // SCREEN_H

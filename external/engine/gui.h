@@ -2,7 +2,7 @@
 #define GUI_H
 
 #define RAYGUI_IMPLEMENTATION
-#include "../../include/raygui.h"
+#include <raygui.h>
 
 typedef struct
 {

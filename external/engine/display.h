@@ -4,7 +4,7 @@
 typedef struct {
     int width;
     int height;
-    const char* name;
+    const char* title;
 } Display;
 
 #endif // DISPLAY_H

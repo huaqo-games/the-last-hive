@@ -1,7 +1,7 @@
 #ifndef BACKGROUND_H
 #define BACKGROUND_H
-#include "../engine/sprite.h"
-#include "raylib.h"
+#include <sprite.h>
+#include <raylib.h>
 
 typedef struct {
     Sprite sprite;
