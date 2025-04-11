@@ -1,6 +1,8 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+#include <raymath.h>
+
 typedef struct {
     Vector2 screenPosition;
     Vector2 worldPosition;

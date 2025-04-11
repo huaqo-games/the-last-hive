@@ -1,7 +1,7 @@
 #ifndef LOGO_H
 #define LOGO_H
 
-#include "../engine/applicationstate.h"
+#include "applicationstate.h"
 
 typedef struct {
     int frameCounter;
