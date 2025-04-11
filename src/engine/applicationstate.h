@@ -1,6 +1,8 @@
 #ifndef APPLICATIONSTATE_H
 #define APPLICATIONSTATE_H
 
+#include "screen.h"
+
 typedef struct {
     Screen currentScreen;
     bool running;

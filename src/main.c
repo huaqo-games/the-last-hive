@@ -1,42 +1,16 @@
 #include <raylib.h>
-#include "../include/raymath.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "engine/screen.h"
-#include "engine/display.h"
-#include "engine/applicationstate.h"
-#include "game/logo.h"
-#include "game/menu.h"
-#include "game/game.h"
-
-typedef struct {
-    State state;
-    Display display;
-    Font font;
-    LogoState logo;
-    GameState game;
-    MenuState menu;
-} Application;
+#include "../include/raymath.h"
+#include "app.h"
 
 int main(void)
 {
-
-    Display display = {
-        .name = "The Last Hive",
-        .width = 1280,
-        .height = 720
-    };
-
-    InitWindow(display.width, display.height, display.name); 
-    InitAudioDevice(); 
-
     Application app;
-    app.state.currentScreen = LOGO;
-    app.state.running = true;
-    app.state.gameStarted = false;
-    app.state.flagFPS = true;
-    app.display = display;
-    app.font = LoadFont("assets/SproutLandsUI/fonts/pixelFont-7-8x14-sproutLands.fnt");
+    InitApp(&app);
+
+    InitWindow(app.display.width, app.display.height, app.display.name); 
+    InitAudioDevice(); 
 
     SetTextureFilter(app.font.texture, TEXTURE_FILTER_POINT);
     SetTraceLogLevel(LOG_NONE);
