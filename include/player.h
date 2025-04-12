@@ -5,7 +5,9 @@
 #include <animation.h>
 #include <physics.h>
 #include <input.h>
+#include <array.h>
 
+#include "flowers.h"
 #include "inventar.h"
 
 typedef enum
@@ -70,7 +72,7 @@ Player CreatePlayer(PlayerAnimationState animState, SelectedTool selectedTool, T
             .color = WHITE},
         .animation = {.state = animState, .currentFrame = 0, .maxFrame = maxFrame, .framesCounter = 0, .framesSpeed = framesSpeed, .animTimer = 0.0f},
         .physics = {.position = startPosition, .direction = (Vector2){0.0f, 0.0f}, .speed = speed},
-        .inventar = {.seedCount = 6}};
+        .inventar = {.flowerSeedCount = 6}};
 }
 
 void UpdatePlayerAnimationState(int *state, SelectedTool *selectedTool, Vector2 *dir)
@@ -129,11 +131,12 @@ void UpdatePlayerAnimationState(int *state, SelectedTool *selectedTool, Vector2 
     }
 }
 
-void UpdatePlayer(Player *player)
+void UpdatePlayer(Player *player, Array* flowers)
 {
-    if (IsKeyPressed(KEY_SPACE) && player->inventar.seedCount > 0)
+    if (IsKeyPressed(KEY_SPACE) && player->inventar.flowerSeedCount > 0)
     {
-        player->inventar.seedCount--;
+        AddFlower(flowers, player->sprite.destRec);
+        player->inventar.flowerSeedCount--;
     }
     Vector2 dir = GetDirectionVector();
     UpdatePlayerAnimationState(&player->animation.state, &player->selectedTool, &dir);

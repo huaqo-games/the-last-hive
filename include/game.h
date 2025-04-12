@@ -7,6 +7,8 @@
 #include <postfx.h>
 #include <soundtrack.h>
 #include <asset.h>
+#include <array.h>
+#include <stdlib.h>
 
 #include "gameassets.h"
 #include "floor.h"
@@ -24,7 +26,7 @@ typedef struct
     RenderTexture2D target;
     Floor floor;
     Object hive;
-    ObjectArray flowers;
+    Array* flowers;
     Player player;
     Bee bee1;
     Camera2D camera;
@@ -65,7 +67,7 @@ void InitGame(GameState *g, Window *window)
 
     // Animated Entities
     g->player = CreatePlayer(IDLE_DOWN, HOE, g->textures[PLAYER], g->assets.textureAssets[PLAYER].frameWidth, 4, 2, g->hive.position, g->assets.textureAssets[PLAYER].rotation, 50.0f);
-    g->bee1 = CreateBee(FLYING, g->textures[BEE], g->assets.textureAssets[BEE].frameWidth, 4, 10, g->hive.position, 10.0f, &g->flowers, &g->hive);
+    // g->bee1 = CreateBee(FLYING, g->textures[BEE], g->assets.textureAssets[BEE].frameWidth, 4, 10, g->hive.position, 10.0f, &g->flowers, &g->hive);
 
     // I/O
     g->camera = CreateCamera(window->width, window->height, g->player.physics.position, 10.0f);
@@ -99,15 +101,16 @@ void UpdateGame(GameState *g, View *currentView, bool *running)
     UpdateMouse(&g->mouse, &g->camera);
     UpdateCamera2D(&g->camera, &g->player.physics.position, &g->mouse);
     UpdateFloor(&g->floor, &g->camera);
-    UpdatePlayer(&g->player);
-    UpdateBee(&g->bee1, &g->flowers, &g->hive);
+    UpdatePlayer(&g->player, g->flowers);
+    UpdateArray(g->flowers, UpdateFlower);
+    // UpdateBee(&g->bee1, &g->flowers, &g->hive);
 }
 
 void RenderComponents(GameState *g)
 {
     RenderFloor(&g->floor);
     RenderSprite(&g->hive.sprite);
-    RenderObjectArray(&g->flowers);
+    RenderArray(g->flowers, RenderFlower);
     RenderSprite(&g->player.sprite);
     RenderSprite(&g->bee1.sprite);
 }
@@ -127,7 +130,7 @@ void RenderGame(GameState *g, const State *appState, Flags *flags)
     {
         RenderPostFX(&g->postFX[i], &g->target);
     }
-    DrawText(TextFormat("%d", g->player.inventar.seedCount), 10, 10, 50, WHITE);
+    DrawText(TextFormat("Flower Seeds: %d", g->player.inventar.flowerSeedCount), 10, 10, 50, WHITE);
 
     if (flags->showFPS)
     {
@@ -155,7 +158,7 @@ void CleanupGame(GameState *g)
         UnloadMusicStream(g->soundtracks[i].music);
     }
     UnloadRenderTexture(g->target);
-    free(g->flowers.data);
+    FreeArray(&g->flowers);
 }
 
 #endif // GAME_H

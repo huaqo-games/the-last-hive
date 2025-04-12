@@ -21,7 +21,7 @@ const TextureAsset texAssets[TEX_COUNT] = {
     {"assets/SproutLandsBasic/Characters/character.png", 48.0f, 48.0f, 0.0f},
     {"assets/SproutLandsBasic/Characters/BasicCharakterActions.png", 48.0f, 48.0f, 0.0f},
     {"assets/SproutLandsBasic/Objects/tools.png", 48.0f, 16.0f, 0.0f},
-    {"assets/flower.png", 16.0f, 16.0f, 45.0f},
+    {"assets/carrot_and_tomato.png", 32.0f, 32.0f, 0.0f},
     {"assets/character_bee.png", 16.0f, 16.0f, 0.0f},
     {"assets/grass.png", 16.0f, 16.0f, 0.0f},
     {"assets/hive.png", 32.0f, 32.0f, 0.0f},
