@@ -102,6 +102,7 @@ void UpdateGame(GameState *g, View *currentView, bool *running)
     UpdateCamera2D(&g->camera, &g->player.physics.position, &g->mouse);
     UpdateFloor(&g->floor, &g->camera);
     UpdatePlayer(&g->player);
+    UpdateArray(g->flowers, UpdateFlower);
     // UpdateBee(&g->bee1, &g->flowers, &g->hive);
 }
 

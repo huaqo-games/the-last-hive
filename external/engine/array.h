@@ -66,6 +66,14 @@ void* GetRandomElementFromArray(Array* array){
     return &array->elements[randomIndex];
 }
 
+void UpdateArray(Array* array, void (*updateFunc)(void*))
+{
+    if (!array || !updateFunc) return;
+    for (unsigned int i = 0; i < array->count; i++) {
+        updateFunc(array->elements[i]);
+    }
+}
+
 void RenderArray(Array* array, void (*renderFunc)(void*))
 {
     if (!array || !renderFunc) return;
