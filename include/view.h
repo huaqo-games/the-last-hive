@@ -1,10 +1,10 @@
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef VIEW_H
+#define VIEW_H
 
-typedef enum Screen {
+typedef enum View {
     LOGO = 0,
     MENU = 1,
     GAMEPLAY = 2
-} Screen;
+} View;
 
 #endif // SCREEN_H
