@@ -7,7 +7,6 @@
 #include <input.h>
 #include <soundtrack.h>
 
-#include "applicationstate.h"
 #include "menuassets.h"
 #include "colors.h"
 #include "background.h"
@@ -58,24 +57,24 @@ void InitMenu(MenuState *m)
     m->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &m->textures[MENU_CURSOR_TEX]);
 
     m->menuScale = 4;
-    int screenWidth = GetScreenWidth();
-    int screenHeight = GetScreenHeight();
-    Vector2 screenCenter = {screenWidth / 2, screenHeight / 2};
+    int windowWidth = GetScreenWidth();
+    int windowHeight = GetScreenHeight();
+    Vector2 windowCenter = {windowWidth / 2, windowHeight / 2};
 
-    int boardWidth = screenWidth / m->menuScale * 2.5f;
+    int boardWidth = windowWidth / m->menuScale * 2.5f;
     float boardScaleFactor = (float)boardWidth / m->assets.textureAssets[MENU_BOARD_TEX].frameWidth;
     int boardHeight = (int)(m->assets.textureAssets[MENU_BOARD_TEX].frameHeight * boardScaleFactor);
 
     Vector2 boardSource = {128.0f, 0.0f};
     Rectangle boardDestRec = {
-        .x = screenCenter.x - (boardWidth / 2),
-        .y = screenCenter.y - (boardHeight / 2),
+        .x = windowCenter.x - (boardWidth / 2),
+        .y = windowCenter.y - (boardHeight / 2),
         .width = boardWidth,
         .height = boardHeight};
 
     m->board = CreateImageElement(&m->textures[MENU_BOARD_TEX], &m->assets.textureAssets[MENU_BOARD_TEX], &boardSource, &boardDestRec);
 
-    int buttonWidth = screenWidth / m->menuScale;
+    int buttonWidth = windowWidth / m->menuScale;
     float buttonScaleFactor = (float)buttonWidth / m->assets.textureAssets[MENU_BIG_BUTTONS_TEX].frameWidth;
     int buttonHeight = (int)(m->assets.textureAssets[MENU_BIG_BUTTONS_TEX].frameHeight * buttonScaleFactor);
     int buttonSpacing = buttonHeight;
@@ -88,14 +87,14 @@ void InitMenu(MenuState *m)
     Vector2 quitButtonPressed = {192.0f, 0.0f};
 
     Rectangle playButtonDestRec = {
-        .x = screenCenter.x - (buttonWidth / 2),
-        .y = screenCenter.y - (buttonHeight / 2),
+        .x = windowCenter.x - (buttonWidth / 2),
+        .y = windowCenter.y - (buttonHeight / 2),
         .width = buttonWidth,
         .height = buttonHeight};
 
     Rectangle quitButtonDestRec = {
-        .x = screenCenter.x - (buttonWidth / 2),
-        .y = screenCenter.y - (buttonHeight / 2) + buttonSpacing,
+        .x = windowCenter.x - (buttonWidth / 2),
+        .y = windowCenter.y - (buttonHeight / 2) + buttonSpacing,
         .width = buttonWidth,
         .height = buttonHeight};
 
@@ -103,7 +102,7 @@ void InitMenu(MenuState *m)
     m->quitButton = CreateImageButton(NOT_CLICKED, &m->textures[MENU_BIG_BUTTONS_TEX], &m->assets.textureAssets[MENU_BIG_BUTTONS_TEX], &quitButtonNotPressed, &quitButtonPressed, &quitButtonHover, &quitButtonDestRec);
 }
 
-void UpdateMenu(MenuState *m, State *state)
+void UpdateMenu(MenuState *m, View *currentView, bool *running)
 {
 
     for (int i = 0; i < MENU_SOUNDTRACK_COUNT; i++)
@@ -111,25 +110,30 @@ void UpdateMenu(MenuState *m, State *state)
         UpdateSoundtrack(&m->soundtracks[i]);
     }
 
-    UpdateBackground(&m->background);
-    UpdateBackground(&m->midground);
-    UpdateBackground(&m->foreground);
-
-    UpdateMouseScreen(&m->mouse);
+    if (GetFPS() >= 60)
+    {
+        SetTargetFPS(60);
+    }
 
     if (isImageButtonClicked(&m->playButton, m->sounds[HOVER_SOUND], m->sounds[CLICK_SOUND]))
     {
-        state->gameStarted = true;
-        state->currentScreen = GAMEPLAY;
+        *running = true;
+        *currentView = GAMEPLAY;
     }
 
     if (isImageButtonClicked(&m->quitButton, m->sounds[HOVER_SOUND], m->sounds[CLICK_SOUND]) || (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE)))
     {
-        state->running = false;
+        *running = false;
     }
+
+    UpdateBackground(&m->background);
+    UpdateBackground(&m->midground);
+    UpdateBackground(&m->foreground);
+    UpdateMouseScreen(&m->mouse);
+
 }
 
-void RenderMenu(MenuState *m, State *appState, Font *font, const char *title)
+void RenderMenu(MenuState *m, Font *font, const char *title, Flags *flags)
 {
     BeginDrawing();
     ClearBackground(WHITE);
@@ -149,7 +153,7 @@ void RenderMenu(MenuState *m, State *appState, Font *font, const char *title)
         0.0f,
         WHITE);
 
-    if (appState->flagFPS)
+    if (flags->showFPS)
     {
         DrawFPS(10, 10);
     }

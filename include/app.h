@@ -2,10 +2,11 @@
 #define APP_H
 
 #include <config.h>
-#include <display.h>
+#include <window.h>
 
-#include "screen.h"
-#include "applicationstate.h"
+#include "view.h"
+#include "state.h"
+#include "flags.h"
 #include "font.h"
 #include "logo.h"
 #include "menu.h"
@@ -14,60 +15,62 @@
 typedef struct {
     Config config;
     State state;
-    Display display;
+    Flags flags;
+    Window window;
     Font font;
     LogoState logo;
     GameState game;
     MenuState menu;
-} Application;
+} App;
 
-void ConfigApp(Application* app){
+void ConfigApp(App* app){
     InitConfig(&app->config, "config/config.ini");
-    app->state.currentScreen = GetConfigInt(&app->config, "startScreen");
+    app->state.currentView = GetConfigInt(&app->config, "startView");
     app->state.running = true;
     app->state.gameStarted = false;
-    app->state.flagFPS =  GetConfigInt(&app->config, "showFPS");
-    app->display.title = GetConfigString(&app->config, "display_title");
-    app->display.width = GetConfigInt(&app->config, "display_width");
-    app->display.height = GetConfigInt(&app->config, "display_height");
+    app->flags.showFPS =  GetConfigInt(&app->config, "showFPS");
+    app->window.title = GetConfigString(&app->config, "window_title");
+    app->window.width = GetConfigInt(&app->config, "window_width");
+    app->window.height = GetConfigInt(&app->config, "window_height");
 }
 
-void InitApp(Application *app){
+void InitApp(App *app){
     InitFont(&app->font);
     InitLogo(&app->logo);
     InitMenu(&app->menu);
-    InitGame(&app->game,&app->display);
+    InitGame(&app->game,&app->window);
 }
 
-void UpdateApp(Application *app){
+void UpdateApp(App *app){
     while (app->state.running)
     {
-        switch (app->state.currentScreen)
+        switch (app->state.currentView)
         {
             case LOGO:
             {
-                UpdateLogo(&app->logo, &app->state);
-                RenderLogo(&app->logo, &app->state);
+                UpdateLogo(&app->logo, &app->state.currentView, &app->state.running);
+                RenderLogo(&app->logo, &app->flags.showFPS);
             }break;
             case MENU:
             {
-                UpdateMenu(&app->menu, &app->state);
-                RenderMenu(&app->menu, &app->state, &app->font, app->display.title);
+                UpdateMenu(&app->menu, &app->state.currentView, &app->state.running);
+                RenderMenu(&app->menu, &app->font, app->window.title, &app->flags);
             }break;
             case GAMEPLAY:
             {
-                UpdateGame(&app->game, &app->state);
-                RenderGame(&app->game, &app->state);
+                UpdateGame(&app->game, &app->state.currentView, &app->state.running);
+                RenderGame(&app->game, &app->state, &app->flags);
             }break;
             default: break;
         } 
     }
 }
 
-void CleanupApp(Application *app){
+void CleanupApp(App *app){
     CleanupMenu(&app->menu);
     CleanupGame(&app->game);
     CleanupFont(&app->font);
+    CleanUpConfig(&app->config);
 }
 
 #endif //APP_H

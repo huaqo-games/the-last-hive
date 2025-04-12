@@ -8,7 +8,6 @@
 #include <soundtrack.h>
 #include <asset.h>
 
-#include "applicationstate.h"
 #include "gameassets.h"
 #include "floor.h"
 #include "player.h"
@@ -33,7 +32,7 @@ typedef struct
     Image image;
 } GameState;
 
-void InitGame(GameState *g, Display *display)
+void InitGame(GameState *g, Window *window)
 {
 
     g->assets = (Assets){
@@ -57,7 +56,7 @@ void InitGame(GameState *g, Display *display)
     }
 
     // Target texture
-    g->target = LoadRenderTexture(display->width, display->height);
+    g->target = LoadRenderTexture(window->width, window->height);
 
     // Static Entities
     g->flowers = CreateFlowers(g->textures[FLOWER], g->assets.textureAssets[FLOWER].frameWidth, g->assets.textureAssets[FLOWER].rotation, 50.0f);
@@ -69,12 +68,12 @@ void InitGame(GameState *g, Display *display)
     g->bee1 = CreateBee(FLYING, g->textures[BEE], g->assets.textureAssets[BEE].frameWidth, 4, 10, g->hive.position, 10.0f, &g->flowers, &g->hive);
 
     // I/O
-    g->camera = CreateCamera(display->width, display->height, g->player.physics.position, 10.0f);
+    g->camera = CreateCamera(window->width, window->height, g->player.physics.position, 10.0f);
 
     g->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &g->textures[CURSOR]);
 }
 
-void UpdateGame(GameState *g, State *state)
+void UpdateGame(GameState *g, View *currentView, bool *running)
 {
     if (GetFPS() <= 60)
     {
@@ -82,11 +81,11 @@ void UpdateGame(GameState *g, State *state)
     }
     if (IsKeyPressed(KEY_ESCAPE))
     {
-        state->currentScreen = MENU;
+        *currentView = MENU;
     }
     if (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))
     {
-        state->running = false;
+        *running = false;
     }
     for (int i = 0; i < SHADER_COUNT; i++)
     {
@@ -113,7 +112,7 @@ void RenderComponents(GameState *g)
     RenderSprite(&g->bee1.sprite);
 }
 
-void RenderGame(GameState *g, const State *appState)
+void RenderGame(GameState *g, const State *appState, Flags *flags)
 {
     BeginTextureMode(g->target);
     ClearBackground(BLACK);
@@ -130,7 +129,7 @@ void RenderGame(GameState *g, const State *appState)
     }
     DrawText(TextFormat("%d", g->player.inventar.seedCount), 10, 10, 50, WHITE);
 
-    if (appState->flagFPS)
+    if (flags->showFPS)
     {
         DrawFPS(10, 10);
     }

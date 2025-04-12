@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "asset.h": "c",
+        "stdlib.h": "c",
+        "view.h": "c"
+    }
+}

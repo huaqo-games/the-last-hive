@@ -4,9 +4,9 @@
 #include "input.h" 
 #include <raymath.h>
 
-Camera2D CreateCamera(int screenWidth, int screenHeight, Vector2 playerPosition, float initZoom){
+Camera2D CreateCamera(int windowWidth, int windowHeight, Vector2 playerPosition, float initZoom){
     return (Camera2D){
-        .offset = (Vector2){screenWidth / 2.0f, screenHeight / 2.0f},
+        .offset = (Vector2){windowWidth / 2.0f, windowHeight / 2.0f},
         .target = playerPosition,
         .rotation = 0.0f,
         .zoom = initZoom

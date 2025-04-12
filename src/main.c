@@ -3,9 +3,9 @@
 
 int main(void)
 {
-    Application app;
+    App app;
     ConfigApp(&app);
-    InitWindow(app.display.width, app.display.height, app.display.title); 
+    InitWindow(app.window.width, app.window.height, app.window.title); 
     InitAudioDevice(); 
     InitApp(&app);
     UpdateApp(&app);

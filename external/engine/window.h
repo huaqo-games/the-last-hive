@@ -5,6 +5,6 @@ typedef struct {
     int width;
     int height;
     const char* title;
-} Display;
+} Window;
 
 #endif // DISPLAY_H
