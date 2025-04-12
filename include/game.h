@@ -101,7 +101,7 @@ void UpdateGame(GameState *g, View *currentView, bool *running)
     UpdateMouse(&g->mouse, &g->camera);
     UpdateCamera2D(&g->camera, &g->player.physics.position, &g->mouse);
     UpdateFloor(&g->floor, &g->camera);
-    UpdatePlayer(&g->player);
+    UpdatePlayer(&g->player, g->flowers);
     UpdateArray(g->flowers, UpdateFlower);
     // UpdateBee(&g->bee1, &g->flowers, &g->hive);
 }
@@ -130,7 +130,7 @@ void RenderGame(GameState *g, const State *appState, Flags *flags)
     {
         RenderPostFX(&g->postFX[i], &g->target);
     }
-    DrawText(TextFormat("%d", g->player.inventar.seedCount), 10, 10, 50, WHITE);
+    DrawText(TextFormat("Flower Seeds: %d", g->player.inventar.flowerSeedCount), 10, 10, 50, WHITE);
 
     if (flags->showFPS)
     {

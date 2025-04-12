@@ -16,6 +16,8 @@ typedef struct {
     float ageTimer;
 } Flower;
 
+Flower DEFAULT_FLOWER;
+
 Array* CreateFlowers(Texture2D texture, float frameWidth, float rotation, float fieldSize)
 {
     Array* flowers = CreateArray(10);
@@ -25,23 +27,33 @@ Array* CreateFlowers(Texture2D texture, float frameWidth, float rotation, float 
         exit(1);
     }
 
+    DEFAULT_FLOWER = (Flower){
+        .sprite = {
+            .texture = texture,
+            .sourceRec = {0.0f, 0.0f, frameWidth, frameWidth},
+            .destRec = {(float)GetRandomValue(-fieldSize,fieldSize), (float)GetRandomValue(-fieldSize,fieldSize), frameWidth, frameWidth},
+            .origin = {frameWidth / 2, frameWidth / 2},
+            .rotation = rotation,
+            .color = WHITE,
+        },
+        .age = CHILD,
+        .ageTimer = 0.0f
+    };
+
     for (int i = 0; i < 10; i++) {
         Flower* flower = malloc(sizeof(Flower));
-        *flower = (Flower){
-            .sprite = {
-                .texture = texture,
-                .sourceRec = {0.0f, 0.0f, frameWidth, frameWidth},
-                .destRec = {(float)GetRandomValue(-fieldSize,fieldSize), (float)GetRandomValue(-fieldSize,fieldSize), frameWidth, frameWidth},
-                .origin = {frameWidth / 2, frameWidth / 2},
-                .rotation = rotation,
-                .color = WHITE,
-            },
-            .age = CHILD,
-            .ageTimer = 0.0f
-        };
+        *flower = DEFAULT_FLOWER;
+        flower->sprite.destRec = (Rectangle){(float)GetRandomValue(-fieldSize,fieldSize), (float)GetRandomValue(-fieldSize,fieldSize), frameWidth, frameWidth};
         AddElementToArray(flowers, flower);
     }
     return flowers;
+}
+
+void AddFlower(Array* flowers, Rectangle rec){
+    Flower* flower = malloc(sizeof(Flower));
+    *flower = DEFAULT_FLOWER;
+    flower->sprite.destRec = rec;
+    AddElementToArray(flowers, flower);
 }
 
 

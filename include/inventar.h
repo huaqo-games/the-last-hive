@@ -3,7 +3,7 @@
 
 
 typedef struct{
-    int seedCount;
+    int flowerSeedCount;
 } Inventar;
 
 #endif // INVENTAR_H
