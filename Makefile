@@ -23,10 +23,13 @@ INCLUDE_FLAGS = -Iinclude
 EXTERNAL_ENGINE = -Iexternal/engine
 EXTERNAL_RAYGUI = -Iexternal/raygui 
 EXTERNAL_RINI = -Iexternal/rini
+EXTERNAL_RAYMATH = -Iexternal/raymath
+
 EXTERNAL_FLAGS = \
 	$(EXTERNAL_ENGINE) \
 	$(EXTERNAL_RINI) \
-	$(EXTERNAL_RAYGUI)
+	$(EXTERNAL_RAYGUI)\
+	$(EXTERNAL_RAYMATH)
 
 ifeq ($(OS), Windows_NT)
 	SRC = src\main.c
