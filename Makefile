@@ -28,13 +28,16 @@ EXTERNAL_FLAGS = \
 	$(EXTERNAL_RINI) \
 	$(EXTERNAL_RAYGUI)
 
+GAME_NAME = the-last-hive
+
+
 ifeq ($(OS), Windows_NT)
 	SRC = src\main.c
-	TARGET = bin\win\game.exe
+	TARGET = bin\win\$(GAME_NAME).exe
 	RAYLIB_FLAGS = -I%RAYLIB% -L%RAYLIB% -lraylib -lopengl32 -lgdi32 -lwinmm
 else
 	SRC = src/main.c 
-	TARGET = bin/osx/game
+	TARGET = bin/osx/$(GAME_NAME)
 	RAYLIB_FLAGS = $(shell pkg-config --libs --cflags raylib)
 endif
 
