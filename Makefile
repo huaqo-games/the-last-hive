@@ -48,3 +48,8 @@ clean:
 
 run: clean build
 	./$(TARGET)
+
+stats:
+	cloc . \
+	--exclude-dir=raygui,rini,bin,assets,.vscode,.github \
+	--not-match-f='(Makefile|\.gitignore)'
