@@ -1,6 +1,8 @@
 #ifndef APP_H
 #define APP_H
 
+#include <raylib.h>
+
 #include <config.h>
 #include <window.h>
 
@@ -35,6 +37,8 @@ void ConfigApp(App* app){
 }
 
 void InitApp(App *app){
+    InitWindow(app->window.width, app->window.height, app->window.title); 
+    InitAudioDevice(); 
     InitFont(&app->font);
     InitLogo(&app->logo);
     InitMenu(&app->menu);
@@ -71,6 +75,7 @@ void CleanupApp(App *app){
     CleanupGame(&app->game);
     CleanupFont(&app->font);
     CleanUpConfig(&app->config);
+    CloseWindow();
 }
 
 #endif //APP_H
