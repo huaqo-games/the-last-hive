@@ -11,6 +11,10 @@ typedef struct
     float speed;
 } Physics;
 
+Vector2 GetPhysicsDirection(Vector2 pos1, Vector2 pos2){
+    return Vector2Normalize(Vector2Subtract(pos1, pos2));
+}
+
 void UpdatePhysicsDirection(Vector2 *direction, Vector2 vector)
 {
     *direction = Vector2Normalize(vector);
