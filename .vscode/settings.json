@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "asset.h": "c",
-        "stdlib.h": "c",
-        "view.h": "c",
-        "__node_handle": "c",
-        "font.h": "c"
-    }
-}
