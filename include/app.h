@@ -5,7 +5,6 @@
 
 #include <config.h>
 #include <window.h>
-
 #include "view.h"
 #include "state.h"
 #include "flags.h"
@@ -34,6 +33,14 @@ void ConfigApp(App* app){
     app->window.title = GetConfigString(&app->config, "window_title");
     app->window.width = GetConfigInt(&app->config, "window_width");
     app->window.height = GetConfigInt(&app->config, "window_height");
+    SetTraceLogLevel(GetConfigInt(&app->config, "log_level") );
+
+    for (int i = 0; i < sizeof(raylibFlags) / sizeof(raylibFlags[0]); i++){
+        int flagValue = GetConfigInt(&app->config, raylibFlags[i]);
+        if (flagValue != 0) {
+            SetConfigFlags(flagValue);
+        }
+    }
 }
 
 void InitApp(App *app){
