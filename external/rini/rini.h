@@ -238,7 +238,8 @@ RINIAPI void rini_save_config(rini_config config, const char *file_name); // Sav
 RINIAPI char *rini_save_config_to_memory(rini_config config);           // Save config to text buffer ('\0' EOL)
 RINIAPI void rini_unload_config(rini_config *config);                   // Unload config data from memory
 
-RINIAPI int rini_get_config_value(rini_config config, const char *key); // Get config value int for provided key, returns 0 if not found
+RINIAPI bool rini_get_config_bool(rini_config config, const char *key);              // Get config bool for provided key, return 0 if not found or not valid
+RINIAPI int rini_get_config_value(rini_config config, const char *key);              // Get config value int for provided key, returns 0 if not found
 RINIAPI const char *rini_get_config_value_text(rini_config config, const char *key); // Get config value text for provided key
 RINIAPI const char *rini_get_config_value_description(rini_config config, const char *key); // Get config value description for provided key
 
@@ -545,6 +546,26 @@ void rini_unload_config(rini_config *config)
     config->values = NULL;
     config->count = 0;
     config->capacity = 0;
+}
+
+// Get config bool for provided key, return 0 if not found or not valid
+bool rini_get_config_bool(rini_config config, const char *key)
+{
+    const char *value_text = rini_get_config_value_text(config, key);  // Get the text value for the key
+    if (value_text != NULL)
+    {
+        // Normalize the text value to lowercase for comparison
+        if (strcmp(value_text, "true") == 0 || strcmp(value_text, "1") == 0 || strcmp(value_text, "yes") == 0)
+        {
+            return true;  // Represents "true"
+        }
+        else if (strcmp(value_text, "false") == 0 || strcmp(value_text, "0") == 0 || strcmp(value_text, "no") == 0)
+        {
+            return false;  // Represents "false"
+        }
+    }
+
+    return false;  // Default if the value is not recognized
 }
 
 // Get config value for provided key, returns 0 if not found or not valid

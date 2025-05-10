@@ -6,6 +6,7 @@
 
 #include <rini.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 typedef struct {
     char *path;
@@ -19,8 +20,12 @@ void InitConfig(Config *config, const char* path) {
     }
 }
 
+bool GetConfigBool(Config *config, const char*key) {
+    return rini_get_config_bool(config->rini, key);
+}
+
 int GetConfigInt(Config *config, const char *key) {
-    return rini_get_config_value_fallback(config->rini, key, 0);
+    return rini_get_config_value(config->rini, key);
 }
 
 int GetConfigIntOrDefault(Config *config, const char *key, int default_value) {
