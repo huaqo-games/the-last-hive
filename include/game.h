@@ -52,10 +52,8 @@ void InitGame(GameState *g, Window *window)
         g->postFX[i] = CreatePostFX(g->assets.shaderAssets[i].path);
     }
 
-    for (int i = 0; i < SOUNDTRACK_COUNT; i++)
-    {
-        g->soundtracks[i] = LoadSoundtrack(g->assets.soundtrackAssets[i].path);
-    }
+    g->soundtracks[BACKGROUND_MUSIC] = LoadSoundtrack(g->assets.soundtrackAssets[BACKGROUND_MUSIC].path);
+    g->soundtracks[BACKGROUND_MUSIC].playing = true;
 
     // Target texture
     g->target = LoadRenderTexture(window->width, window->height);
@@ -67,11 +65,9 @@ void InitGame(GameState *g, Window *window)
 
     // Animated Entities
     g->player = CreatePlayer(IDLE_DOWN, HOE, g->textures[PLAYER], g->assets.textureAssets[PLAYER].frameWidth, 4, 2, g->hive.position, g->assets.textureAssets[PLAYER].rotation, 50.0f);
-    // g->bee1 = CreateBee(FLYING, g->textures[BEE], g->assets.textureAssets[BEE].frameWidth, 4, 10, g->hive.position, 10.0f, &g->flowers, &g->hive);
 
     // I/O
     g->camera = CreateCamera(window->width, window->height, g->player.physics.position, 10.0f);
-
     g->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &g->textures[CURSOR]);
 }
 
@@ -93,17 +89,14 @@ void UpdateGame(GameState *g, View *currentView, bool *running)
     {
         UpdatePostFX(&g->postFX[i]);
     }
-    for (int i = 0; i < SOUNDTRACK_COUNT; i++)
-    {
-        UpdateSoundtrack(&g->soundtracks[i]);
-    }
 
+    UpdateSoundtrack(&g->soundtracks[BACKGROUND_MUSIC]);
     UpdateMouse(&g->mouse, &g->camera);
     UpdateCamera2D(&g->camera, &g->player.physics.position, &g->mouse);
     UpdateFloor(&g->floor, &g->camera);
     UpdatePlayer(&g->player, g->flowers);
     UpdateArray(g->flowers, UpdateFlower);
-    // UpdateBee(&g->bee1, &g->flowers, &g->hive);
+    // UpdateBee(&g->bee1, g->flowers);
 }
 
 void RenderComponents(GameState *g)

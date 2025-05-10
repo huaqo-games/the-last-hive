@@ -43,11 +43,14 @@ const ShaderAsset shaderAssets[SHADER_COUNT] = {
 typedef enum
 {
     BEE_AMBIENT,
+    BACKGROUND_MUSIC,
     SOUNDTRACK_COUNT
 } SoundtrackID;
 
 const SoundtrackAsset soundtrackAssets[SOUNDTRACK_COUNT] = {
-    {"assets/beez.mp3"}};
+    {"assets/beez.mp3"},
+    {"assets/audio/sounds/bg.mp3"}
+};
 
 ////////////////////////////////////////////////////////////////////////////
 
