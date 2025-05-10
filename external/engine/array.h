@@ -58,6 +58,11 @@ int RemoveElementFromArray(Array* array, unsigned int index) {
     return 1;
 }
 
+void* GetElementAtIndex(Array* array, unsigned int index) {
+    if (array == NULL || index >= array->count) return NULL;
+    return array->elements[index];
+}
+
 void* GetRandomElementFromArray(Array* array){
     if (array == NULL || array->elements == NULL || array->count == 0) {
         return NULL;
