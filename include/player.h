@@ -56,6 +56,7 @@ typedef struct
     Animation animation;
     Physics physics;
     Inventar inventar;
+    Vector2 position;
 } Player;
 
 Player CreatePlayer(PlayerAnimationState animState, SelectedTool selectedTool, Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 startPosition, float rotation, float speed)
@@ -135,7 +136,7 @@ void UpdatePlayer(Player *player, Array* flowers)
 {
     if (IsKeyPressed(KEY_SPACE) && player->inventar.flowerSeedCount > 0)
     {
-        AddFlower(flowers, player->sprite.destRec);
+        AddFlower(flowers, player->physics.position);
         player->inventar.flowerSeedCount--;
     }
     Vector2 dir = GetDirectionVector();

@@ -13,18 +13,15 @@ typedef struct {
     Vector2 position;
 } Target;
 
-typedef struct {
-    Vector2 position;
-} Hive;
-
 typedef struct
 {
     Sprite sprite;
     Animation animation;
+    float defaultSpeed;
     Physics physics;
+    Vector2 defaultTarget;
     Target target;
-    Hive hive;
-    int flowerCount;
+    int visitedFlowers;
 } Bee;
 
 Bee CreateBee(BeeAnimationState animState, Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 position, float speed, Vector2 targetPosition, Vector2 basePosition){
@@ -46,43 +43,74 @@ Bee CreateBee(BeeAnimationState animState, Texture2D texture, float frameWidth, 
             .framesSpeed = framesSpeed,
             .animTimer = 0.0f
         },
+        .defaultSpeed = speed,
         .physics = {
             .position = position,
             .direction = (Vector2){0.0f,0.0f},
             .speed = speed
         },
+        .defaultTarget = basePosition,
         .target = { .position = targetPosition },
-        .hive = { .position = basePosition },
     };
 }
 
 void UpdateBee(Bee* bee, Array* flowers){
     const float tolerance = 1.0f;
 
-    // Flower *randomFlower = (Flower *)GetRandomElementFromArray(flowers);
-    // printf("\n\n\n\n\n\n\n Random flower position: {%f, %f}\n\n\n\n\n\n\n", randomFlower->position.x, randomFlower->position.y);
-    // bee->target.position = randomFlower->position;
+    bool allPollinated = true;
+    for (int i = 0; i < flowers->count; i++) {
+        Flower* flower = (Flower*)GetElementAtIndex(flowers, i);
+        printf("\n\n\n\n\nFlower Coordinate: {%f, %f}\n\n\n\n\n", flower->position.x, flower->position.y);
+        if (!flower->pollinated)
+        {
+            allPollinated = false;
+            printf("\n\n\n\n\n\n\n\nNew unpolinated.\n\n\n\n\n\n\n\n");
+            break;
+        }
+    }
 
-    // Check if bee has collected from flowers
-    if (bee->flowerCount < flowers->count) {
-        // Has it reached the target?
+    if (!allPollinated) {
+        // Has the bee reached the target?
         if (fabs(bee->physics.position.x - bee->target.position.x) < tolerance &&
             fabs(bee->physics.position.y - bee->target.position.y) < tolerance) {
-            
-            // Increase flower count and set new target
-            bee->flowerCount++;
-            Flower* randomFlower = (Flower*)GetRandomElementFromArray(flowers);
-            bee->target.position = randomFlower->position;
+
+            // Mark the flower as pollinated
+            for (int i = 0; i < flowers->count; i++) {
+                Flower* flower = (Flower*)GetElementAtIndex(flowers, i);
+                if (Vector2Distance(flower->position, bee->target.position) < tolerance) {
+                    if (!flower->pollinated) {
+                        flower->pollinated = true;
+                        bee->visitedFlowers++;
+                    }
+                    break;
+                }
+            }
+
+            // Pick a new random unpollinated flower as target
+            Flower* newTarget = NULL;
+            int safety = 100;
+            while (newTarget == NULL && safety-- > 0) {
+                Flower* candidate = (Flower*)GetRandomElementFromArray(flowers);
+                if (!candidate->pollinated) {
+                    newTarget = candidate;
+                }
+            }
+
+            if (newTarget != NULL) {
+                bee->target.position = newTarget->position;
+                bee->physics.speed = bee->defaultSpeed;  // Ensure bee starts moving again
+            }
         }
     } else {
-        // Go back to hive
-        bee->target.position = bee->hive.position;
+            // All pollinated: return to hive
+            bee->target.position = bee->defaultTarget;
 
-        // Stop moving once reached hive
-        if (fabs(bee->physics.position.x - bee->target.position.x) < tolerance &&
-            fabs(bee->physics.position.y - bee->target.position.y) < tolerance) {
-            bee->physics.speed = 0.0f;
-        }
+            if (Vector2Distance(bee->physics.position, bee->target.position) < tolerance) {
+                bee->physics.speed = 0.0f;
+            } else {
+                // bee->target.position = bee->defaultTarget;
+                bee->physics.speed = bee->defaultSpeed;
+            }
     }
 
     Vector2 direction = GetPhysicsDirection(bee->target.position, bee->physics.position);

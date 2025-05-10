@@ -59,7 +59,8 @@ void InitGame(GameState *g, Window *window)
     g->target = LoadRenderTexture(window->width, window->height);
 
     // Static Entities
-    g->flowers = CreateFlowers(g->textures[FLOWER], g->assets.textureAssets[FLOWER].frameWidth, g->assets.textureAssets[FLOWER].rotation, 50.0f);
+    
+    g->flowers = CreateFlowers(2,g->textures[FLOWER], g->assets.textureAssets[FLOWER].frameWidth, g->assets.textureAssets[FLOWER].rotation, 50.0f);
     g->floor = CreateFloor(g->textures[GRASS], g->assets.textureAssets[GRASS].frameWidth);
     g->hive = CreateHive(g->textures[HIVE], g->assets.textureAssets[HIVE].frameWidth);
 
