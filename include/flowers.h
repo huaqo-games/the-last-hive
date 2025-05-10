@@ -18,7 +18,11 @@ typedef struct {
 
 Flower DEFAULT_FLOWER;
 
-Array* CreateFlowers(Texture2D texture, float frameWidth, float rotation, float fieldSize)
+Array* CreateFlowers(
+    Texture2D texture, 
+    float frameWidth, 
+    float rotation, 
+    float fieldSize)
 {
     Array* flowers = CreateArray(10);
 
@@ -44,6 +48,7 @@ Array* CreateFlowers(Texture2D texture, float frameWidth, float rotation, float 
         Flower* flower = malloc(sizeof(Flower));
         *flower = DEFAULT_FLOWER;
         flower->sprite.destRec = (Rectangle){(float)GetRandomValue(-fieldSize,fieldSize), (float)GetRandomValue(-fieldSize,fieldSize), frameWidth, frameWidth};
+        flower->position = (Vector2){flower->sprite.destRec.x, flower->sprite.destRec.y};
         AddElementToArray(flowers, flower);
     }
     return flowers;

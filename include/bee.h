@@ -10,15 +10,24 @@ typedef enum {
 } BeeAnimationState;
 
 typedef struct {
+    Vector2 position;
+} Target;
+
+typedef struct {
+    Vector2 position;
+} Hive;
+
+typedef struct
+{
     Sprite sprite;
     Animation animation;
     Physics physics;
-    Object target;
-    Object hive;
+    Target target;
+    Hive hive;
     int flowerCount;
 } Bee;
 
-Bee CreateBee(BeeAnimationState animState, Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 position, float speed, ObjectArray* target, Object* base){
+Bee CreateBee(BeeAnimationState animState, Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 position, float speed, Vector2 targetPosition, Vector2 basePosition){
     return (Bee){
         .sprite = {
             .texture = texture,
@@ -42,31 +51,43 @@ Bee CreateBee(BeeAnimationState animState, Texture2D texture, float frameWidth, 
             .direction = (Vector2){0.0f,0.0f},
             .speed = speed
         },
-        .target = *GetRandomObject(target),
-        .hive = *base
+        .target = { .position = targetPosition },
+        .hive = { .position = basePosition },
     };
 }
 
-void UpdateBee(Bee* bee, ObjectArray* flowers, Object* hive){
-    const float tolerance = 1.0f; 
+void UpdateBee(Bee* bee, Array* flowers){
+    const float tolerance = 1.0f;
 
-    if (bee->flowerCount < 4){
+    // Flower *randomFlower = (Flower *)GetRandomElementFromArray(flowers);
+    // printf("\n\n\n\n\n\n\n Random flower position: {%f, %f}\n\n\n\n\n\n\n", randomFlower->position.x, randomFlower->position.y);
+    // bee->target.position = randomFlower->position;
+
+    // Check if bee has collected from flowers
+    if (bee->flowerCount < flowers->count) {
+        // Has it reached the target?
         if (fabs(bee->physics.position.x - bee->target.position.x) < tolerance &&
             fabs(bee->physics.position.y - bee->target.position.y) < tolerance) {
-            bee->target = *GetRandomObject(flowers);
+            
+            // Increase flower count and set new target
             bee->flowerCount++;
-        } else {
+            Flower* randomFlower = (Flower*)GetRandomElementFromArray(flowers);
+            bee->target.position = randomFlower->position;
         }
     } else {
-        bee->target = *hive;
+        // Go back to hive
+        bee->target.position = bee->hive.position;
+
+        // Stop moving once reached hive
         if (fabs(bee->physics.position.x - bee->target.position.x) < tolerance &&
             fabs(bee->physics.position.y - bee->target.position.y) < tolerance) {
             bee->physics.speed = 0.0f;
-        } else {
         }
     }
-    
-    UpdatePhysics(&bee->physics, GetDirectionToObject(&bee->target, bee->physics.position));
+
+    Vector2 direction = GetPhysicsDirection(bee->target.position, bee->physics.position);
+
+    UpdatePhysics(&bee->physics, direction);
     UpdateSpriteRotation(&bee->sprite, &bee->physics.direction);
     UpdateSpriteDestRec(&bee->sprite, &bee->physics.position);
     UpdateAnimation(&bee->animation, GetFrameTime());

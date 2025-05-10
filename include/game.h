@@ -66,6 +66,10 @@ void InitGame(GameState *g, Window *window)
     // Animated Entities
     g->player = CreatePlayer(IDLE_DOWN, HOE, g->textures[PLAYER], g->assets.textureAssets[PLAYER].frameWidth, 4, 2, g->hive.position, g->assets.textureAssets[PLAYER].rotation, 50.0f);
 
+    Flower* randomFlower = (Flower*)GetRandomElementFromArray(g->flowers);
+    printf("randomFlower.position = { %f, %f}", randomFlower->position.x, randomFlower->position.y);
+    g->bee1 = CreateBee(FLYING, g->textures[BEE], g->assets.textureAssets[BEE].frameWidth, 4, 10, g->hive.position, 10.0f, randomFlower->position, g->hive.position);
+
     // I/O
     g->camera = CreateCamera(window->width, window->height, g->player.physics.position, 10.0f);
     g->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &g->textures[CURSOR]);
@@ -96,7 +100,7 @@ void UpdateGame(GameState *g, View *currentView, bool *running)
     UpdateFloor(&g->floor, &g->camera);
     UpdatePlayer(&g->player, g->flowers);
     UpdateArray(g->flowers, UpdateFlower);
-    // UpdateBee(&g->bee1, g->flowers);
+    UpdateBee(&g->bee1, g->flowers);
 }
 
 void RenderComponents(GameState *g)
