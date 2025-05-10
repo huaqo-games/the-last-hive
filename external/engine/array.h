@@ -63,7 +63,7 @@ void* GetRandomElementFromArray(Array* array){
         return NULL;
     }
     int randomIndex = GetRandomValue(0, (int)array->count-1);
-    return &array->elements[randomIndex];
+    return array->elements[randomIndex];
 }
 
 void UpdateArray(Array* array, void (*updateFunc)(void*))
