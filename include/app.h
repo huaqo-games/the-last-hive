@@ -34,6 +34,7 @@ void ConfigApp(App* app){
     app->window.width = GetConfigInt(&app->config, "window_width");
     app->window.height = GetConfigInt(&app->config, "window_height");
     SetTraceLogLevel(GetConfigInt(&app->config, "log_level") );
+    SetExitKey(KEY_NULL);
 
     for (int i = 0; i < sizeof(raylibFlags) / sizeof(raylibFlags[0]); i++){
         int flagValue = GetConfigInt(&app->config, raylibFlags[i]);

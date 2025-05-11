@@ -110,6 +110,8 @@ void UpdateMenu(MenuState *m, View *currentView, bool *running)
         UpdateSoundtrack(&m->soundtracks[i]);
     }
 
+
+
     if (GetFPS() >= 60)
     {
         SetTargetFPS(60);
@@ -118,6 +120,11 @@ void UpdateMenu(MenuState *m, View *currentView, bool *running)
     if (isImageButtonClicked(&m->playButton, m->sounds[HOVER_SOUND], m->sounds[CLICK_SOUND]))
     {
         *running = true;
+        *currentView = GAMEPLAY;
+    }
+
+    if (IsKeyPressed(KEY_ESCAPE) && *running == true)
+    {
         *currentView = GAMEPLAY;
     }
 
