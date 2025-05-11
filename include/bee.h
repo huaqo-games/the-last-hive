@@ -60,11 +60,9 @@ void UpdateBee(Bee* bee, Array* flowers){
     bool allPollinated = true;
     for (int i = 0; i < flowers->count; i++) {
         Flower* flower = (Flower*)GetElementAtIndex(flowers, i);
-        printf("\n\n\n\n\nFlower Coordinate: {%f, %f}\n\n\n\n\n", flower->position.x, flower->position.y);
         if (!flower->pollinated)
         {
             allPollinated = false;
-            printf("\n\n\n\n\n\n\n\nNew unpolinated.\n\n\n\n\n\n\n\n");
             break;
         }
     }
