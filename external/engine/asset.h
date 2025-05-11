@@ -2,6 +2,10 @@
 #define ASSET_H
 
 typedef struct {
+    const char *path;
+} MapAsset;
+
+typedef struct {
     const char* path;
     float frameWidth;
     float frameHeight;
@@ -21,6 +25,7 @@ typedef struct {
 } SoundAsset;
 
 typedef struct {
+    const MapAsset *mapAssets;
     const TextureAsset *textureAssets;
     const ShaderAsset *shaderAssets;
     const SoundtrackAsset *soundtrackAssets;

@@ -23,20 +23,22 @@ INCLUDE_FLAGS = -Iinclude
 EXTERNAL_ENGINE = -Iexternal/engine
 EXTERNAL_RAYGUI = -Iexternal/raygui 
 EXTERNAL_RINI = -Iexternal/rini
+EXTERNAL_CLDTK = -Iexternal/cLDtk
 EXTERNAL_FLAGS = \
 	$(EXTERNAL_ENGINE) \
 	$(EXTERNAL_RINI) \
-	$(EXTERNAL_RAYGUI)
+	$(EXTERNAL_RAYGUI) \
+	$(EXTERNAL_CLDTK)		
 
 GAME_NAME = the-last-hive
 
 
 ifeq ($(OS), Windows_NT)
-	SRC = src\main.c
+	SRC = src\main.c external\cLDtk\cLDtk.c external\cLDtk\parson.c
 	TARGET = bin\win\$(GAME_NAME).exe
 	RAYLIB_FLAGS = -I%RAYLIB% -L%RAYLIB% -lraylib -lopengl32 -lgdi32 -lwinmm
 else
-	SRC = src/main.c 
+	SRC = src/main.c external/cLDtk/cLDtk.c external/cLDtk/parson.c
 	TARGET = bin/osx/$(GAME_NAME)
 	RAYLIB_FLAGS = $(shell pkg-config --libs --cflags raylib)
 endif

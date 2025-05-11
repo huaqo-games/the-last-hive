@@ -16,6 +16,7 @@
 #include "bee.h"
 #include "hive.h"
 #include "flowers.h"
+#include "map.h"
 
 typedef struct
 {
@@ -32,13 +33,18 @@ typedef struct
     Camera2D camera;
     Mouse mouse;
     Image image;
+    Texture2D mapAtlas;
+    struct layerInstances* lvl_one_collisions;
+    struct layerInstances* lvl_one_background;
+    struct levels *lvl_one;
 } GameState;
 
 void InitGame(GameState *g, Window *window)
 {
 
     g->assets = (Assets){
-        .textureAssets = texAssets,
+        .mapAssets = mapAssets,
+        .textureAssets = textureAssets,
         .shaderAssets = shaderAssets,
         .soundtrackAssets = soundtrackAssets};
 
@@ -59,8 +65,27 @@ void InitGame(GameState *g, Window *window)
     g->target = LoadRenderTexture(window->width, window->height);
 
     // Static Entities
-    
-    g->flowers = CreateFlowers(2,g->textures[FLOWER], g->assets.textureAssets[FLOWER].frameWidth, g->assets.textureAssets[FLOWER].rotation, 50.0f);
+    g->mapAtlas = LoadTexture(g->assets.mapAssets[MAP_LDTK_PNG].path); 
+    CreateMap(g->assets.mapAssets[MAP_LDTK].path);
+    printf("Map path: %s\n", g->assets.mapAssets[MAP_LDTK].path);
+
+    g->lvl_one = getLevel("Level_1");
+    if (!g->lvl_one) {
+    fprintf(stderr, "Level_1 not found!\n");
+    exit(EXIT_FAILURE);
+    }
+    g->lvl_one_collisions = getLayer("Collisions",g->lvl_one->uid);
+    if (!g->lvl_one_collisions) {
+    fprintf(stderr, "Collisions layer not found!\n");
+    exit(EXIT_FAILURE);
+    }
+    g->lvl_one_background = getLayer("Bg_textures",g->lvl_one->uid);
+    if (!g->lvl_one_background) {
+    fprintf(stderr, "Background layer not found!\n");
+    exit(EXIT_FAILURE);
+    }
+
+    g->flowers = CreateFlowers(2, g->textures[FLOWER], g->assets.textureAssets[FLOWER].frameWidth, g->assets.textureAssets[FLOWER].rotation, 50.0f);
     g->floor = CreateFloor(g->textures[GRASS], g->assets.textureAssets[GRASS].frameWidth);
     g->hive = CreateHive(g->textures[HIVE], g->assets.textureAssets[HIVE].frameWidth);
 
@@ -68,7 +93,6 @@ void InitGame(GameState *g, Window *window)
     g->player = CreatePlayer(IDLE_DOWN, HOE, g->textures[PLAYER], g->assets.textureAssets[PLAYER].frameWidth, 4, 2, g->hive.position, g->assets.textureAssets[PLAYER].rotation, 50.0f);
 
     Flower* randomFlower = (Flower*)GetRandomElementFromArray(g->flowers);
-    printf("randomFlower.position = { %f, %f}", randomFlower->position.x, randomFlower->position.y);
     g->bee1 = CreateBee(FLYING, g->textures[BEE], g->assets.textureAssets[BEE].frameWidth, 4, 10, g->hive.position, 10.0f, randomFlower->position, g->hive.position);
 
     // I/O
@@ -106,7 +130,9 @@ void UpdateGame(GameState *g, View *currentView, bool *running)
 
 void RenderComponents(GameState *g)
 {
-    RenderFloor(&g->floor);
+    // RenderFloor(&g->floor);
+
+    RenderMap(g->mapAtlas, g->lvl_one, g->lvl_one_background, g->lvl_one_collisions);
     RenderSprite(&g->hive.sprite);
     RenderArray(g->flowers, RenderFlower);
     RenderSprite(&g->player.sprite);
@@ -157,6 +183,7 @@ void CleanupGame(GameState *g)
     }
     UnloadRenderTexture(g->target);
     FreeArray(&g->flowers);
+    // UnloadMap(&g->map);
 }
 
 #endif // GAME_H

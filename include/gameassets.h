@@ -2,6 +2,20 @@
 #define GAMEASSETS_H
 #include <asset.h>
 
+typedef enum
+{
+    MAP_TILED,
+    MAP_LDTK,
+    MAP_LDTK_PNG,
+    MAP_COUNT
+} MapID;
+
+const MapAsset mapAssets[MAP_COUNT] = {
+    { "assets/map.tmx" },
+    { "assets/map.json" },
+    { "assets/SunnyLand_by_Ansimuz.png" }
+};
+
 ////////////////////////////////////////////////////////////////////////////
 
 typedef enum
@@ -17,7 +31,7 @@ typedef enum
     TEX_COUNT
 } TextureID;
 
-const TextureAsset texAssets[TEX_COUNT] = {
+const TextureAsset textureAssets[TEX_COUNT] = {
     {"assets/SproutLandsBasic/Characters/character.png", 48.0f, 48.0f, 0.0f},
     {"assets/SproutLandsBasic/Characters/BasicCharakterActions.png", 48.0f, 48.0f, 0.0f},
     {"assets/SproutLandsBasic/Objects/tools.png", 48.0f, 16.0f, 0.0f},
@@ -36,7 +50,8 @@ typedef enum
 } ShaderID;
 
 const ShaderAsset shaderAssets[SHADER_COUNT] = {
-    {"shaders/postfx.fs"}};
+    {"shaders/postfx.fs"}
+};
 
 ////////////////////////////////////////////////////////////////////////////
 
