@@ -26,8 +26,6 @@ typedef struct {
 void ConfigApp(App* app){
     InitConfig(&app->config, "config/config.ini");
     app->state.currentView = GetConfigInt(&app->config, "startView");
-    app->state.running = true;
-    app->state.gameStarted = false;
     app->flags.showFPS =  GetConfigInt(&app->config, "showFPS");
     app->window.title = GetConfigString(&app->config, "window_title");
     app->window.width = GetConfigInt(&app->config, "window_width");
@@ -42,6 +40,10 @@ void InitApp(App *app){
 }
 
 void UpdateApp(App *app){
+
+    app->state.running = true;
+    app->state.gameStarted = false;
+
     while (app->state.running)
     {
         switch (app->state.currentView)
