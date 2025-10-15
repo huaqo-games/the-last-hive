@@ -27,7 +27,7 @@ void ConfigApp(App* app){
     InitConfig(&app->config, "config/config.ini");
     app->state.currentView = GetConfigInt(&app->config, "startView");
     app->flags.showFPS =  GetConfigInt(&app->config, "showFPS");
-	app->flags.soundOn = GetConfigInt(&app->config, "soundOn");
+	app->flags.soundtrackOn = GetConfigInt(&app->config, "soundtrackOn");
     app->window.title = GetConfigString(&app->config, "window_title");
     app->window.width = GetConfigInt(&app->config, "window_width");
     app->window.height = GetConfigInt(&app->config, "window_height");

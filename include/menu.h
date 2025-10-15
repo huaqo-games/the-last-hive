@@ -107,7 +107,7 @@ void UpdateMenu(MenuState *m, State *state, Flags *flags)
 
     for (int i = 0; i < MENU_SOUNDTRACK_COUNT; i++)
     {
-		UpdateSoundtrack(&m->soundtracks[i], flags->soundOn);
+		UpdateSoundtrack(&m->soundtracks[i], flags->soundtrackOn);
 	}
 
     if (GetFPS() >= 60)
