@@ -102,13 +102,13 @@ void InitMenu(MenuState *m)
     m->quitButton = CreateImageButton(NOT_CLICKED, &m->textures[MENU_BIG_BUTTONS_TEX], &m->assets.textureAssets[MENU_BIG_BUTTONS_TEX], &quitButtonNotPressed, &quitButtonPressed, &quitButtonHover, &quitButtonDestRec);
 }
 
-void UpdateMenu(MenuState *m, View *currentView, bool *running)
+void UpdateMenu(MenuState *m, State *state, Flags *flags)
 {
 
     for (int i = 0; i < MENU_SOUNDTRACK_COUNT; i++)
     {
-        UpdateSoundtrack(&m->soundtracks[i]);
-    }
+		UpdateSoundtrack(&m->soundtracks[i], flags->soundOn);
+	}
 
     if (GetFPS() >= 60)
     {
@@ -117,13 +117,13 @@ void UpdateMenu(MenuState *m, View *currentView, bool *running)
 
     if (isImageButtonClicked(&m->playButton, m->sounds[HOVER_SOUND], m->sounds[CLICK_SOUND]))
     {
-        *running = true;
-        *currentView = GAMEPLAY;
+        state->running = true;
+        state->currentView = GAMEPLAY;
     }
 
     if (isImageButtonClicked(&m->quitButton, m->sounds[HOVER_SOUND], m->sounds[CLICK_SOUND]) || (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE)))
     {
-        *running = false;
+        state->running = false;
     }
 
     UpdateBackground(&m->background);

@@ -78,7 +78,7 @@ void UpdateLogo(LogoState *l, View *currentView, bool *running) {
     } 
 }
 
-void RenderLogo(const LogoState *l, bool *showFPS) {
+void RenderLogo(const LogoState *l, Flags *flags) {
     BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -107,7 +107,7 @@ void RenderLogo(const LogoState *l, bool *showFPS) {
             DrawText(TextSubtext("raylib", 0, l->lettersCount), GetScreenWidth() / 2 - 44, GetScreenHeight() / 2 + 48, 50, Fade(BLACK, l->alpha));
         } 
 
-        if (*showFPS){
+        if (flags->showFPS){
             DrawFPS(10, 10);
         }
 

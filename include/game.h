@@ -75,7 +75,7 @@ void InitGame(GameState *g, Window *window)
     g->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &g->textures[CURSOR]);
 }
 
-void UpdateGame(GameState *g, View *currentView, bool *running)
+void UpdateGame(GameState *g, View *currentView, bool *running, Flags *flags)
 {
     if (GetFPS() <= 60)
     {
@@ -95,7 +95,7 @@ void UpdateGame(GameState *g, View *currentView, bool *running)
     }
     for (int i = 0; i < SOUNDTRACK_COUNT; i++)
     {
-        UpdateSoundtrack(&g->soundtracks[i]);
+        UpdateSoundtrack(&g->soundtracks[i], flags->soundOn);
     }
 
     UpdateMouse(&g->mouse, &g->camera);

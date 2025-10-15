@@ -27,6 +27,7 @@ void ConfigApp(App* app){
     InitConfig(&app->config, "config/config.ini");
     app->state.currentView = GetConfigInt(&app->config, "startView");
     app->flags.showFPS =  GetConfigInt(&app->config, "showFPS");
+	app->flags.soundOn = GetConfigInt(&app->config, "soundOn");
     app->window.title = GetConfigString(&app->config, "window_title");
     app->window.width = GetConfigInt(&app->config, "window_width");
     app->window.height = GetConfigInt(&app->config, "window_height");
@@ -51,16 +52,16 @@ void UpdateApp(App *app){
             case LOGO:
             {
                 UpdateLogo(&app->logo, &app->state.currentView, &app->state.running);
-                RenderLogo(&app->logo, &app->flags.showFPS);
+                RenderLogo(&app->logo, &app->flags);
             }break;
             case MENU:
             {
-                UpdateMenu(&app->menu, &app->state.currentView, &app->state.running);
+                UpdateMenu(&app->menu, &app->state, &app->flags);
                 RenderMenu(&app->menu, &app->font, app->window.title, &app->flags);
             }break;
             case GAMEPLAY:
             {
-                UpdateGame(&app->game, &app->state.currentView, &app->state.running);
+                UpdateGame(&app->game, &app->state.currentView, &app->state.running, &app->flags);
                 RenderGame(&app->game, &app->state, &app->flags);
             }break;
             default: break;
