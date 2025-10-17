@@ -3,7 +3,7 @@
 
 typedef struct {
     bool showFPS;
-	bool soundOn;
+	bool soundtrackOn;
 } Flags;
 
 #endif // FLAGS_H

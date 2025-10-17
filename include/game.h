@@ -75,19 +75,23 @@ void InitGame(GameState *g, Window *window)
     g->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &g->textures[CURSOR]);
 }
 
-void UpdateGame(GameState *g, View *currentView, bool *running, Flags *flags)
+void UpdateGame(GameState *g, State *state, Flags *flags)
 {
+	if(!state->gameStarted){
+		state->gameStarted = true;
+	}
+
     if (GetFPS() <= 60)
     {
         SetTargetFPS(0);
     }
     if (IsKeyPressed(KEY_ESCAPE))
     {
-        *currentView = MENU;
+        state->currentView = MENU;
     }
     if (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))
     {
-        *running = false;
+        state->running = false;
     }
     for (int i = 0; i < SHADER_COUNT; i++)
     {
@@ -95,7 +99,7 @@ void UpdateGame(GameState *g, View *currentView, bool *running, Flags *flags)
     }
     for (int i = 0; i < SOUNDTRACK_COUNT; i++)
     {
-        UpdateSoundtrack(&g->soundtracks[i], flags->soundOn);
+        UpdateSoundtrack(&g->soundtracks[i], flags->soundtrackOn);
     }
 
     UpdateMouse(&g->mouse, &g->camera);

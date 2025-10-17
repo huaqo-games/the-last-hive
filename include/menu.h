@@ -121,6 +121,11 @@ void UpdateMenu(MenuState *m, State *state, Flags *flags)
         state->currentView = GAMEPLAY;
     }
 
+	if (IsKeyPressed(KEY_ESCAPE) && state->gameStarted)
+	{
+		state->currentView = GAMEPLAY;
+	}
+
     if (isImageButtonClicked(&m->quitButton, m->sounds[HOVER_SOUND], m->sounds[CLICK_SOUND]) || (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE)))
     {
         state->running = false;
