@@ -10,10 +10,13 @@ typedef struct
     char *text;
 } Button;
 
-void initButton(Button *b, char *text, int buttonWidth, int buttonHeight, int buttonPosX, int buttonPosY)
+Button initButton(char *text, Vector2 dimensions, Vector2 position)
 {
-    b->rec = (Rectangle){buttonPosX - buttonWidth / 2, buttonPosY - buttonHeight / 2, buttonWidth, buttonHeight};
-    b->text = text;
+	Button b;
+
+    b.rec = (Rectangle){position.x - dimensions.x / 2, position.y - dimensions.y / 2, dimensions.x, dimensions.y};
+    b.text = text;
+	return b;
 }
 
 int isButtonClicked(Button *b)
