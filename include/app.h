@@ -69,7 +69,7 @@ void UpdateApp(App *app){
             }break;
 			case SETTINGS:
 			{
-				UpdateSettings(&app->settings, &app->flags);
+				UpdateSettings(&app->settings, &app->state, &app->flags); 
 				RenderSettings(&app->settings, &app->flags);
 			}
             default: break;

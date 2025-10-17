@@ -28,7 +28,7 @@ void InitSettings(SettingsState *s)
 	s->soundtrackOn = initButton("soundtrackOn", standardButtonDimensions, button2Pos);
 }
 
-void UpdateSettings(SettingsState *s, Flags *flags)
+void UpdateSettings(SettingsState *s, State *state,Flags *flags)
 {
 	ShowCursor();
 
@@ -39,6 +39,12 @@ void UpdateSettings(SettingsState *s, Flags *flags)
 	if(isButtonClicked(&s->soundtrackOn)){
 		flags->soundtrackOn = !flags->soundtrackOn;
 	}
+
+	if (IsKeyPressed(KEY_ESCAPE)){
+		state->currentView = MENU;
+	}
+
+	
 }
 
 void RenderSettings(SettingsState *s, Flags *flags)
