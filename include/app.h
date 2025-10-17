@@ -11,6 +11,7 @@
 #include "logo.h"
 #include "menu.h"
 #include "game.h"
+#include "settings.h"
 
 typedef struct {
     Config config;
@@ -18,9 +19,10 @@ typedef struct {
     Flags flags;
     Window window;
     Font font;
-    LogoState logo;
-    GameState game;
+    LogoState logo;	
     MenuState menu;
+    GameState game;
+	SettingsState settings;
 } App;
 
 void ConfigApp(App* app){
@@ -38,6 +40,7 @@ void InitApp(App *app){
     InitLogo(&app->logo);
     InitMenu(&app->menu);
     InitGame(&app->game,&app->window);
+	InitSettings(&app->settings);
 }
 
 void UpdateApp(App *app){
@@ -61,9 +64,14 @@ void UpdateApp(App *app){
             }break;
             case GAMEPLAY:
             {
-                UpdateGame(&app->game, &app->state.currentView, &app->state.running, &app->flags);
+                UpdateGame(&app->game, &app->state, &app->flags);
                 RenderGame(&app->game, &app->state, &app->flags);
             }break;
+			case SETTINGS:
+			{
+				UpdateSettings(&app->settings, &app->flags);
+				RenderSettings(&app->settings, &app->flags);
+			}
             default: break;
         } 
     }
