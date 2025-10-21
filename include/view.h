@@ -4,8 +4,7 @@
 typedef enum View {
     LOGO = 0,
     MENU = 1,
-    GAMEPLAY = 2,
-	SETTINGS = 3
+    GAMEPLAY = 2
 } View;
 
 #endif // SCREEN_H

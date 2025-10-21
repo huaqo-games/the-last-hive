@@ -4,15 +4,16 @@
 #include <gui.h>
 #include <input.h>
 #include <flags.h>
+#include "menuview.h"
 
 typedef struct 
 {
 	Button showFPS;
 	Button soundtrackOn;
 
-} SettingsState;
+} MenuSettings;
 
-void InitSettings(SettingsState *s)
+void InitMenuSettings(MenuSettings *s)
 {
 	int windowWidth = GetScreenWidth();
 	int windowHeight = GetScreenHeight();
@@ -28,7 +29,7 @@ void InitSettings(SettingsState *s)
 	s->soundtrackOn = initButton("soundtrackOn", standardButtonDimensions, button2Pos);
 }
 
-void UpdateSettings(SettingsState *s, State *state,Flags *flags)
+void UpdateMenuSettings(MenuSettings *s, MenuView *menuView,Flags *flags)
 {
 	ShowCursor();
 
@@ -41,13 +42,13 @@ void UpdateSettings(SettingsState *s, State *state,Flags *flags)
 	}
 
 	if (IsKeyPressed(KEY_ESCAPE)){
-		state->currentView = MENU;
+		*menuView = MAIN;
 	}
 
 	
 }
 
-void RenderSettings(SettingsState *s, Flags *flags)
+void RenderMenuSettings(MenuSettings *s, Flags *flags)
 {
 	BeginDrawing();
 	ClearBackground(BLACK);
@@ -62,6 +63,10 @@ void RenderSettings(SettingsState *s, Flags *flags)
 
 	EndDrawing();
 	
+}
+
+void ClenupMenuSettings(MenuSettings *s){
+
 }
 
 #endif // SETTINGS_H
