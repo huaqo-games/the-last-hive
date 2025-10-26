@@ -5,145 +5,148 @@
 #include <animation.h>
 #include <physics.h>
 #include <input.h>
-#include <array.h>
+#include <asset.h>
 
-#include "flowers.h"
 #include "inventar.h"
 
 typedef enum
 {
-    IDLE,
-    WALKING,
-    USING_TOOL
-} PlayerState;
+	START_SHIP,
+	PLAYER_TEX_COUNT
+} playerTextureID;
 
-typedef enum
-{
-    NO_TOOL,
-    HOE,
-    AXT,
-    CAN
-} SelectedTool;
+const TextureAsset textureAssets[PLAYER_TEX_COUNT] = {
+    {"assets/start_ship.png", 16.0f, 16.0f, 0.0f}
+};
 
-typedef enum
-{
-    IDLE_DOWN,
-    IDLE_UP,
-    IDLE_LEFT,
-    IDLE_RIGHT,
-    WALKING_DOWN,
-    WALKING_UP,
-    WALKING_LEFT,
-    WALKING_RIGHT,
-    HOE_DOWN,
-    HOE_UP,
-    HOE_RIGHT,
-    HOE_LEFT,
-    AXT_DOWN,
-    AXT_UP,
-    AXT_RIGHT,
-    AXT_LEFT,
-    CAN_DOWN,
-    CAN_UP,
-    CAN_RIGHT,
-    CAN_LEFT,
-} PlayerAnimationState;
+
+
+typedef enum {
+	ANCHOR,
+	SLOW_AHEAD,
+	FAST_AHEAD,
+	SPEED_COUNT
+} playerSpeedID;
+
+float playerSpeeds[SPEED_COUNT] = {
+	0.0f,
+	5.0f,
+	10.0f
+};
+
 
 typedef struct
 {
-    SelectedTool selectedTool;
     Sprite sprite;
     Animation animation;
     Physics physics;
-    Inventar inventar;
+	float rotation;
 } Player;
 
-Player CreatePlayer(PlayerAnimationState animState, SelectedTool selectedTool, Texture2D texture, float frameWidth, int maxFrame, int framesSpeed, Vector2 startPosition, float rotation, float speed)
+Player CreatePlayer(void)
 {
-    return (Player){
-        .selectedTool = selectedTool,
-        .sprite = {
+
+	TextureAsset startShipAsset = textureAssets[START_SHIP];
+	
+	Texture2D texture = LoadTexture(startShipAsset.path);
+	float frameWidth = startShipAsset.frameWidth;
+	float rotation = startShipAsset.rotation;
+	
+
+	Sprite playerSprite  = {
             .texture = texture,
             .frameSize = {frameWidth, frameWidth},
             .sourceRec = {0.0f, 0.0f, frameWidth, frameWidth},
             .destRec = {0.0f, 0.0f, frameWidth, frameWidth},
             .origin = {frameWidth / 2, frameWidth / 2},
             .rotation = rotation,
-            .color = WHITE},
-        .animation = {.state = animState, .currentFrame = 0, .maxFrame = maxFrame, .framesCounter = 0, .framesSpeed = framesSpeed, .animTimer = 0.0f},
-        .physics = {.position = startPosition, .direction = (Vector2){0.0f, 0.0f}, .speed = speed},
-        .inventar = {.flowerSeedCount = 6}};
+            .color = WHITE
+	};
+
+	Animation playerAnimation = {
+		.state = 1, 
+		.currentFrame = 0, 
+		.maxFrame = 3, 
+		.framesCounter = 0, 
+		.framesSpeed = 0.0f, 
+		.animTimer = 0.0f
+	};
+
+	Physics playerPhysics = {
+		.position = (Vector2){0.0f,0.0f}, 
+		.direction = (Vector2){0.0f, 0.0f}, 
+		.speed = playerSpeeds[ANCHOR]
+	};
+
+	
+    return (Player){
+        .sprite = playerSprite,
+		.animation = playerAnimation,
+        .physics = playerPhysics,
+		.rotation = rotation
+	};
 }
 
-void UpdatePlayerAnimationState(int *state, SelectedTool *selectedTool, Vector2 *dir)
+void UpdatePlayer(Player *player)
 {
 
-    if (IsKeyPressed(KEY_ZERO))
-    {
-        *selectedTool = NO_TOOL;
-    }
 
-    if (IsKeyPressed(KEY_ONE))
-    {
-        *selectedTool = HOE;
-    }
 
-    if (IsKeyPressed(KEY_TWO))
-    {
-        *selectedTool = AXT;
-    }
+	if(IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)){
+		if(player->physics.speed < playerSpeeds[FAST_AHEAD]){
+			if(player->physics.speed < playerSpeeds[SLOW_AHEAD]){
+				player->physics.speed = playerSpeeds[SLOW_AHEAD];
+				player->sprite.sourceRec.x = 16.0f * 1;
+			}
+			else {
+				player->physics.speed = playerSpeeds[FAST_AHEAD];
+				player->sprite.sourceRec.x = 16.0f * 2;	
+			}
+		}
+	}
 
-    if (IsKeyPressed(KEY_THREE))
-    {
-        *selectedTool = CAN;
-    }
+	if(IsKeyPressed(KEY_S) || IsKeyPressed(KEY_DOWN)){
+		if(player->physics.speed > playerSpeeds[ANCHOR]){
+			if(player->physics.speed > playerSpeeds[SLOW_AHEAD]){
+				player->physics.speed = playerSpeeds[SLOW_AHEAD];
+				player->sprite.sourceRec.x = 16.0f * 1;
+			}
+			else {
+				player->physics.speed = playerSpeeds[ANCHOR];
+				player->sprite.sourceRec.x = 16.0f * 0;
 
-    if (dir->x == 0 && dir->y == 0)
-    {
-        switch (*state)
-        {
-        case WALKING_DOWN:
-            *state = IDLE_DOWN;
-            break;
-        case WALKING_UP:
-            *state = IDLE_UP;
-            break;
-        case WALKING_LEFT:
-            *state = IDLE_LEFT;
-            break;
-        case WALKING_RIGHT:
-            *state = IDLE_RIGHT;
-            break;
-        default:
-            break;
-        }
-    }
-    else
-    {
-        if (dir->y == 1)
-            *state = WALKING_DOWN;
-        else if (dir->y == -1)
-            *state = WALKING_UP;
-        else if (dir->x == -1)
-            *state = WALKING_LEFT;
-        else if (dir->x == 1)
-            *state = WALKING_RIGHT;
-    }
-}
+			}
+		}
+	}
 
-void UpdatePlayer(Player *player, Array* flowers)
-{
-    if (IsKeyPressed(KEY_SPACE) && player->inventar.flowerSeedCount > 0)
-    {
-        AddFlower(flowers, player->sprite.destRec);
-        player->inventar.flowerSeedCount--;
-    }
-    Vector2 dir = GetDirectionVector();
-    UpdatePlayerAnimationState(&player->animation.state, &player->selectedTool, &dir);
+
+	float rotationSpeed = 100.0f;
+
+	if (player->physics.speed > playerSpeeds[ANCHOR]){
+
+		if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
+			player->rotation -= rotationSpeed * GetFrameTime();
+		}
+
+		if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
+			player->rotation += rotationSpeed * GetFrameTime();
+		}
+	}
+
+	player->sprite.rotation = player->rotation;
+
+	float rad = (player->rotation - 90.0f) * (PI / 180.0f);
+	Vector2 dir = { cosf(rad), sinf(rad) };
+
+
     UpdatePhysics(&player->physics, dir);
     UpdateSpriteDestRec(&player->sprite, &player->physics.position);
-    UpdateAnimation(&player->animation, GetFrameTime());
-    UpdateSpriteSourceRec(&player->sprite, &(Vector2){player->sprite.frameSize.x * player->animation.currentFrame, player->sprite.frameSize.y * player->animation.state});
+    //UpdateAnimation(&player->animation, GetFrameTime());
+    //UpdateSpriteSourceRec(&player->sprite, &(Vector2){player->sprite.frameSize.x * player->animation.currentFrame, player->sprite.frameSize.y * player->animation.state});
+}
+
+void RenderPlayer(Player *player){
+	RenderSprite(&player->sprite);
 }
 
 #endif // PLAYER_H

@@ -17,7 +17,7 @@ PostProcessing CreatePostFX(const char* shaderPath){
         return postFX;
     }
 
-    postFX.strength = 0.3f;
+    postFX.strength = 0.0f;
     postFX.resolutionLoc = GetShaderLocation(postFX.shader, "resolution");
     postFX.strengthLoc = GetShaderLocation(postFX.shader, "strength");
     Vector2 resolution = { (float)GetScreenWidth(), (float)GetScreenHeight() };

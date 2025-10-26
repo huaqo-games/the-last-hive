@@ -1,17 +1,6 @@
 {
   "configurations": [
     {
-      "name": "macOS",
-      "includePath": [
-        "${workspaceFolder}/include",
-        "${workspaceFolder}/external/engine",
-        "${workspaceFolder}/external/raygui",
-        "${workspaceFolder}/external/rini",            
-        "/opt/homebrew/Cellar/raylib/5.5/include" 
-      ],
-      "cStandard": "c99",
-    },
-    {
       "name": "Windows",
       "includePath": [
         "${workspaceFolder}/include",
