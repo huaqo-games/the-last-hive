@@ -1,16 +1,15 @@
 #ifndef APP_H
 #define APP_H
 
-#include <config.h>
-#include <window.h>
+#include <engine.h>
 
-#include "view.h"
-#include "state.h"
-#include "flags.h"
-#include "font.h"
-#include "logo.h"
-#include "menu.h"
-#include "game.h"
+#include "appState.h"
+#include "appSettings.h"
+#include "appColors.h"
+
+#include "appLogo.h"
+#include "appMenu.h"
+#include "appGame.h"
 
 typedef struct {
     Config config;
@@ -34,7 +33,7 @@ void ConfigApp(App* app){
 }
 
 void InitApp(App *app){
-    InitFont(&app->font);
+    InitFont(&app->font, "assets/pixelFont-7-8x14-sproutLands.fnt");
     InitLogo(&app->logo);
     InitMenu(&app->menu);
     InitGame(&app->game,&app->window);
