@@ -33,7 +33,7 @@ void ConfigApp(App* app){
 }
 
 void InitApp(App *app){
-    InitFont(&app->font, "assets/pixelFont-7-8x14-sproutLands.fnt");
+    InitFont(&app->font, "assets/font.fnt");
     InitLogo(&app->logo);
     InitMenu(&app->menu);
     InitGame(&app->game,&app->window);
