@@ -5,6 +5,7 @@
 #include "appGameFloor.h"
 #include "appGamePlayer.h"
 #include "appGameBirds.h"
+#include "appGameIslands.h"
 #include "appGameAssets.h"
 
 typedef struct
@@ -16,6 +17,7 @@ typedef struct
     Floor floor;
     Player player;
   	Birds birds;
+	Islands islands;
     Camera2D camera;
     Mouse mouse;
     Image image;
@@ -41,6 +43,7 @@ void InitGame(GameState *g, Window *window)
   g->target = LoadRenderTexture(window->width, window->height);
   g->player = CreatePlayer();
   g->birds = CreateBirds();
+  g->islands = CreateIslands();
   g->floor = CreateFloor();
   g->camera = CreateCamera(g->player.physics.position, 10.0f);
 
@@ -83,6 +86,7 @@ void UpdateGame(GameState *g, State *state, Flags *flags)
     UpdateFloor(&g->floor, &g->camera);
     UpdatePlayer(&g->player);
     UpdateBirds(&g->birds);
+	UpdateIslands(&g->islands);
 }
 
 void RenderComponents(GameState *g)
@@ -90,6 +94,7 @@ void RenderComponents(GameState *g)
     RenderFloor(&g->floor);
     RenderPlayer(&g->player);
     RenderBirds(&g->birds);
+	RenderIslands(&g->islands);
 }
 
 void RenderGame(GameState *g, const State *appState, Flags *flags)
