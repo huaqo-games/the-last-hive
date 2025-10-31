@@ -14,7 +14,7 @@ typedef enum
 } birdsTextureID;
 
 const TextureAsset birdsTextureAssets[BIRDS_TEX_COUNT] = {
-	{"assets/birds.png", 16.0f, 16.0f, 0.0f}
+	{"assets/birds.png", 16.0f, 16.0f, 45.0f}
 };
 
 Birds CreateBirds(void){
