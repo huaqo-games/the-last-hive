@@ -249,6 +249,9 @@ void RenderComponents(App *app);
 void RenderGame(App *app);
 void CleanupGame(App *app);
 
+void OnEscapeChangeView(App *app, View view);
+void OnWindowClosedStoppApp(App *app);
+
 void ConfigApp(App *app);
 void InitApp(App *app);
 void UpdateApp(App *app);

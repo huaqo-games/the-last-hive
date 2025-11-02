@@ -1,12 +1,12 @@
 #include "appTypes.h"
 
 const ShaderAsset shaderAssets[SHADER_COUNT] = {
-    {"shaders/postfx.fs"}};
-
-
+    {"shaders/postfx.fs"}
+};
 
 const SoundtrackAsset soundtrackAssets[SOUNDTRACK_COUNT] = {
-    {"assets/sea.mp3"}};
+    {"assets/sea.mp3"}
+};
 
 
 void InitGame(App *app)
@@ -38,27 +38,24 @@ void InitGame(App *app)
   g->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &mouseTexture);
 }
 
-void UpdateGame(App *app)
+void StartGame(App *app)
 {
-	GameState *g = &app->game;
 	if(!app->state.gameStarted){
 		app->state.gameStarted = true;
 	}
+}
 
-    if (GetFPS() <= 60)
-    {
-        SetTargetFPS(0);
-    }
 
-    if (IsKeyPressed(KEY_ESCAPE))
-    {
-        app->state.currentView = MENU;
-    }
+void UpdateGame(App *app)
+{
+	GameState *g = &app->game;
+	
+    SetTargetFPS(0);
 
-    if (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))
-    {
-        app->state.running = false;
-    }
+	StartGame(app);
+
+	OnEscapeChangeView(app, MENU);
+	OnWindowClosedStoppApp(app);
 
 	for (int i = 0; i < SHADER_COUNT; i++)
     {

@@ -18,7 +18,6 @@ void InitMenuSettings(MenuSettings *s)
 
 void UpdateMenuSettings(MenuSettings *s, MenuView *menuView,Flags *flags)
 {
-	ShowCursor();
 
 	if(isButtonClicked(&s->showFPS)){
 		flags->showFPS = !flags->showFPS;
