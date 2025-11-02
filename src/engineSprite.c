@@ -1,18 +1,5 @@
-#ifndef SPRITE_H
-#define SPRITE_H
+#include "engine.h"
 
-#include <raymath.h>
-
-typedef struct
-{
-    Texture2D texture;
-    Rectangle sourceRec;
-    Rectangle destRec;
-    Vector2 frameSize;
-    Vector2 origin;
-    float rotation;
-    Color color;
-} Sprite;
 
 void UpdateSpriteSourceRec(Sprite *sprite, const Vector2 *vector)
 {
@@ -58,5 +45,3 @@ void PrintSprite(const Sprite *sprite)
     printf("  Sprite.rotation: %f\n", sprite->rotation);
     printf("  Sprite.color: r = %d, g = %d, b = %d, a = %d\n", sprite->color.r, sprite->color.g, sprite->color.b, sprite->color.a);
 }
-
-#endif // SPRITE_H

@@ -1,5 +1,4 @@
-#ifndef FONT_H
-#define FONT_H
+#include "engine.h"
 
 void InitFont(Font *font, const char* path){
     *font = LoadFont(path);
@@ -10,4 +9,3 @@ void CleanupFont(Font *font){
     UnloadFont(*font);
 }
 
-#endif //FONT_H

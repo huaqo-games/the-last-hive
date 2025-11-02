@@ -1,14 +1,4 @@
-#ifndef APPGAMEFloor_H
-#define APPGAMEFloor_H
-
-
-typedef struct
-{
-    Sprite sprite;
-    Rectangle bounds;
-    Shader shader;
-    float time;
-} Floor;
+#include "appTypes.h"
 
 Floor CreateFloor(void)
 {
@@ -97,6 +87,4 @@ void UnloadFloor(Floor *floor)
 {
     UnloadShader(floor->shader);
 }
-
-#endif // APPGAMEFLOOR_H
 

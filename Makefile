@@ -29,11 +29,11 @@ EXTERNAL_FLAGS = \
 	$(EXTERNAL_RAYGUI)
 
 ifeq ($(OS), Windows_NT)
-	SRC = src\main.c
+	SRC = $(wildcard src\*.c)
 	TARGET = bin\win\game.exe
 	RAYLIB_FLAGS = -I%RAYLIB% -L%RAYLIB% -lraylib -lopengl32 -lgdi32 -lwinmm
 else
-	SRC = src/main.c 
+	SRC = $(wildcard src/*.c)
 	TARGET = bin/osx/game
 	RAYLIB_FLAGS = $(shell pkg-config --libs --cflags raylib)
 endif

@@ -1,15 +1,4 @@
-#ifndef PHYSICS_H
-#define PHYSICS_H
-
-#include <raymath.h>
-
-typedef struct
-{
-    Vector2 position;
-    Vector2 direction;
-    Vector2 velocity;
-    float speed;
-} Physics;
+#include "engine.h"
 
 void UpdatePhysicsDirection(Vector2 *direction, Vector2 vector)
 {
@@ -38,4 +27,3 @@ void UpdatePhysics(Physics *physics, Vector2 direction)
     UpdatePhysicsPosition(&physics->position, &physics->velocity);
 }
 
-#endif // PHYSICS_H

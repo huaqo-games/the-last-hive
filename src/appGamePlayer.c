@@ -1,22 +1,10 @@
-#ifndef APPGAMEPLAYER_H
-#define APPGAMEPLAYER_H
-
-typedef enum
-{
-	START_SHIP,
-	PLAYER_TEX_COUNT
-} playerTextureID;
+#include "appTypes.h"
 
 const TextureAsset playerTextureAssets[PLAYER_TEX_COUNT] = {
     {"assets/ship_start.png", 16.0f, 16.0f, 0.0f}
 };
 
-typedef enum {
-	ANCHOR,
-	SLOW_AHEAD,
-	FAST_AHEAD,
-	SPEED_COUNT
-} playerSpeedID;
+
 
 float playerSpeeds[SPEED_COUNT] = {
 	0.0f,
@@ -32,15 +20,6 @@ playerSpeedID GetPlayerSpeedID(float speed) {
     }
     return ANCHOR;
 }
-
-
-typedef struct
-{
-    Sprite sprite;
-    Animation animation;
-    Physics physics;
-	float rotation;
-} Player;
 
 Player CreatePlayer(void)
 {
@@ -142,4 +121,3 @@ void RenderPlayer(Player *player){
 	RenderSprite(&player->sprite);
 }
 
-#endif // APPGAMEPLAYER_H

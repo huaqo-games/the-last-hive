@@ -1,16 +1,7 @@
-#ifndef CONFIG_H
-#define CONFIG_H
-
 #define RINI_IMPLEMENTATION
 #define RINI_VALUE_DELIMITER '='
 
-#include <rini.h>
-#include <stdio.h>
-
-typedef struct {
-    char *path;
-    rini_config rini;
-} Config;
+#include "engine.h"
 
 void InitConfig(Config *config, const char* path) {
     config->rini = rini_load_config(path);
@@ -63,4 +54,3 @@ void CleanUpConfig(Config *config) {
     rini_unload_config(&config->rini);  
 }
 
-#endif // CONFIG_H

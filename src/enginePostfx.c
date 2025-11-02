@@ -1,12 +1,4 @@
-#ifndef POSTFX_H
-#define POSTFX_H
-
-typedef struct {
-    Shader shader;
-    int resolutionLoc;
-    int strengthLoc;
-    float strength;
-} PostProcessing;
+#include "engine.h"
 
 PostProcessing CreatePostFX(const char* shaderPath){
     PostProcessing postFX = {0};
@@ -42,5 +34,3 @@ void UnloadPostFX(PostProcessing *postFX){
     if (postFX->shader.id == 0) return;
     UnloadShader(postFX->shader);
 }
-
-#endif // POSTFX_H

@@ -1,5 +1,4 @@
-#include <raylib.h>
-#include "app.h"
+#include "appTypes.h"
 
 int main(void)
 {

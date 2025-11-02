@@ -1,16 +1,4 @@
-#ifndef APPMENU_H
-#define APPMENU_H
-
-#include <appMenuView.h>
-#include <appMenuSettings.h>
-#include <appMenuMain.h>
-
-typedef struct
-{
-	MenuView menuView;
-	MenuMain menuMain;	
-	MenuSettings menuSettings;
-} MenuState;
+#include "appTypes.h"
 
 void InitMenu(MenuState *m)
 {
@@ -59,4 +47,3 @@ void CleanupMenu(MenuState *m)
 	CleanupMenuMain(&m->menuMain);
 }
 
-#endif // APPMENU_H

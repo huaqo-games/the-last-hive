@@ -1,26 +1,6 @@
-#ifndef APP_H
-#define APP_H
-
 #include <engine.h>
 
-#include "appState.h"
-#include "appSettings.h"
-#include "appColors.h"
-
-#include "appLogo.h"
-#include "appMenu.h"
-#include "appGame.h"
-
-typedef struct {
-    Config config;
-    State state;
-    Flags flags;
-    Window window;
-    Font font;
-    LogoState logo;	
-    MenuState menu;
-    GameState game;
-} App;
+#include "appTypes.h"
 
 void ConfigApp(App* app){
     InitConfig(&app->config, "config/config.ini");
@@ -36,7 +16,7 @@ void InitApp(App *app){
     InitFont(&app->font, "assets/font.fnt");
     InitLogo(&app->logo);
     InitMenu(&app->menu);
-    InitGame(&app->game,&app->window);
+    InitGame(app);
 }
 
 void UpdateApp(App *app){
@@ -60,8 +40,8 @@ void UpdateApp(App *app){
             }break;
             case GAMEPLAY:
             {
-                UpdateGame(&app->game, &app->state, &app->flags);
-                RenderGame(&app->game, &app->state, &app->flags);
+                UpdateGame(app);
+                RenderGame(app);
             }break;
             default: break;
         } 
@@ -70,9 +50,8 @@ void UpdateApp(App *app){
 
 void CleanupApp(App *app){
     CleanupMenu(&app->menu);
-    CleanupGame(&app->game);
+    CleanupGame(app);
     CleanupFont(&app->font);
     CleanUpConfig(&app->config);
 }
 
-#endif //APP_H

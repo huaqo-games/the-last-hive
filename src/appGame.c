@@ -1,30 +1,17 @@
-#ifndef APPGAME_H
-#define APPGAME_H
+#include "appTypes.h"
+
+const ShaderAsset shaderAssets[SHADER_COUNT] = {
+    {"shaders/postfx.fs"}};
 
 
-#include "appGameFloor.h"
-#include "appGamePlayer.h"
-#include "appGameBirds.h"
-#include "appGameIslands.h"
-#include "appGameAssets.h"
 
-typedef struct
+const SoundtrackAsset soundtrackAssets[SOUNDTRACK_COUNT] = {
+    {"assets/sea.mp3"}};
+
+
+void InitGame(App *app)
 {
-  	Assets assets;
-    PostProcessing postFX[SHADER_COUNT];
-    Soundtrack soundtracks[SOUNDTRACK_COUNT];
-    RenderTexture2D target;
-    Floor floor;
-    Player player;
-  	Birds birds;
-	Islands islands;
-    Camera2D camera;
-    Mouse mouse;
-    Image image;
-} GameState;
-
-void InitGame(GameState *g, Window *window)
-{
+   GameState *g = &app->game;
   g->assets = (Assets){
       .shaderAssets = shaderAssets,
       .soundtrackAssets = soundtrackAssets
@@ -40,7 +27,7 @@ void InitGame(GameState *g, Window *window)
       g->soundtracks[i] = LoadSoundtrack(g->assets.soundtrackAssets[i].path);
   }
 
-  g->target = LoadRenderTexture(window->width, window->height);
+  g->target = LoadRenderTexture(app->window.width, app->window.height);
   g->player = CreatePlayer();
   g->birds = CreateBirds();
   g->islands = CreateIslands();
@@ -51,10 +38,11 @@ void InitGame(GameState *g, Window *window)
   g->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &mouseTexture);
 }
 
-void UpdateGame(GameState *g, State *state, Flags *flags)
+void UpdateGame(App *app)
 {
-	if(!state->gameStarted){
-		state->gameStarted = true;
+	GameState *g = &app->game;
+	if(!app->state.gameStarted){
+		app->state.gameStarted = true;
 	}
 
     if (GetFPS() <= 60)
@@ -64,12 +52,12 @@ void UpdateGame(GameState *g, State *state, Flags *flags)
 
     if (IsKeyPressed(KEY_ESCAPE))
     {
-        state->currentView = MENU;
+        app->state.currentView = MENU;
     }
 
     if (WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))
     {
-        state->running = false;
+        app->state.running = false;
     }
 
 	for (int i = 0; i < SHADER_COUNT; i++)
@@ -78,7 +66,7 @@ void UpdateGame(GameState *g, State *state, Flags *flags)
     }
     for (int i = 0; i < SOUNDTRACK_COUNT; i++)
     {
-        UpdateSoundtrack(&g->soundtracks[i], flags->soundtrackOn);
+        UpdateSoundtrack(&g->soundtracks[i], app->flags.soundtrackOn);
     }
 
     UpdateMouse(&g->mouse, &g->camera);
@@ -89,22 +77,31 @@ void UpdateGame(GameState *g, State *state, Flags *flags)
 	UpdateIslands(&g->islands);
 }
 
-void RenderComponents(GameState *g)
+void RenderComponents(App *app)
 {
+	GameState *g = &app->game;
     RenderFloor(&g->floor);
     RenderPlayer(&g->player);
     RenderBirds(&g->birds);
 	RenderIslands(&g->islands);
 }
 
-void RenderGame(GameState *g, const State *appState, Flags *flags)
+void RenderGame(App *app)
 {
+	GameState *g = &app->game;
+	
     BeginTextureMode(g->target);
     ClearBackground(BLACK);
     BeginMode2D(g->camera);
-    RenderComponents(g);
+    RenderComponents(app);
     EndMode2D();
-    DrawTextureRec(g->mouse.cursorTexture, (Rectangle){0, 0, g->mouse.cursorTexture.width, g->mouse.cursorTexture.height}, (Vector2){g->mouse.screenPosition.x, g->mouse.screenPosition.y}, WHITE);
+    DrawTextureRec
+	(
+		g->mouse.cursorTexture, 
+		(Rectangle){0, 0, g->mouse.cursorTexture.width, g->mouse.cursorTexture.height}, 
+		(Vector2){g->mouse.screenPosition.x, g->mouse.screenPosition.y}, 
+		WHITE
+	);
     EndTextureMode();
 
     BeginDrawing();
@@ -114,7 +111,7 @@ void RenderGame(GameState *g, const State *appState, Flags *flags)
         RenderPostFX(&g->postFX[i], &g->target);
     }
 
-    if (flags->showFPS)
+    if (app->flags.showFPS)
     {
         DrawFPS(10, 10);
     }
@@ -122,8 +119,9 @@ void RenderGame(GameState *g, const State *appState, Flags *flags)
     EndDrawing();
 }
 
-void CleanupGame(GameState *g)
+void CleanupGame(App *app)
 {
+	GameState *g = &app->game;
     for (int i = 0; i < SHADER_COUNT; i++)
     {
         UnloadPostFX(&g->postFX[i]);
@@ -135,4 +133,3 @@ void CleanupGame(GameState *g)
     UnloadRenderTexture(g->target);
 }
 
-#endif // APPGAME_H

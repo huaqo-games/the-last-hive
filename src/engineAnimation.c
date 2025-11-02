@@ -1,14 +1,4 @@
-#ifndef ANIMATION_H
-#define ANIMATION_H
-
-typedef struct {   
-    int state;
-    int currentFrame;       
-    int maxFrame;           
-    int framesCounter;      
-    int framesSpeed;        
-    float animTimer;  
-} Animation;
+#include "engine.h"
 
 void UpdateAnimation(Animation *animation, float deltaTime) {
     animation->animTimer += deltaTime;
@@ -25,5 +15,3 @@ void UpdateAnimation(Animation *animation, float deltaTime) {
         animation->currentFrame = 0;
     }
 }
-
-#endif // ANIMATION_H

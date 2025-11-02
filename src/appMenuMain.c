@@ -1,25 +1,23 @@
-#ifndef APPMENUMAIN_H
-#define APPMENUMAIN_H
+#include "appTypes.h"
 
-#include "appMenuAssets.h"
-#include "appMenuView.h"
-#include "appMenuMainBackground.h"
 
-typedef struct {
-    Assets assets;
-    Mouse mouse;
-    Texture2D textures[MENU_TEX_COUNT];
-    Sound sounds[MENU_SOUND_COUNT];
-    Soundtrack soundtracks[MENU_SOUNDTRACK_COUNT];
-    ImageElement board;
-    ImageButton playButton;
-    ImageButton quitButton;
-	ImageButton settingsButton;
-    int menuScale;
-    Background background;
-    Background midground;
-    Background foreground;
-} MenuMain;
+const TextureAsset menuTextureAssets[MENU_TEX_COUNT] = {
+    {"assets/mouse.png", 16.0f, 16.0f, 0.0f},
+    {"assets/buttons.png", 288.0f/3, 96.0f/3, 0.0f},
+    {"assets/menu_board.png", 128.0f, 144.0f, 0.0f},
+    {"assets/cloud_background.png", 576.0f, 324.0f, 0.0f},
+    {"assets/cloud_midground.png", 576.0f, 324.0f, 0.0f},
+    {"assets/cloud_foreground.png", 576.0f, 324.0f, 0.0f}};
+
+
+const SoundtrackAsset menuSoundtrackAssets[MENU_SOUNDTRACK_COUNT] = {
+    {"assets/merrygoround.wav"}};
+
+
+const SoundAsset menuSoundAssets[MENU_SOUND_COUNT] = {
+    {"assets/button_hover.wav"},
+    {"assets/button_click.wav"}};
+
 
 void InitMenuMain(MenuMain *m){
 		
@@ -208,4 +206,3 @@ void CleanupMenuMain(MenuMain *m){
     }
 }
 
-#endif //APPMENUMAIN_H

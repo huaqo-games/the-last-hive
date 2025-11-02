@@ -1,19 +1,4 @@
-#ifndef OBJECT_H
-#define OBJECT_H
-#include "sprite.h" 
-#include "vector.h"
-
-
-typedef struct {
-    Sprite sprite;
-    Vector2 position;
-} Object;
-
-typedef struct {
-    Object *data;
-    const Object *prototype;
-    size_t count;
-} ObjectArray;
+#include "engine.h"
 
 ObjectArray CreateObjectArray(const Object *prototype, const size_t count) {
     ObjectArray objects = {0};
@@ -126,4 +111,3 @@ void RenderObjectArray(const ObjectArray *objects){
     }
 }
 
-#endif // OBJECT_H

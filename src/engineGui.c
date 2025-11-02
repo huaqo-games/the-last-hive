@@ -1,14 +1,6 @@
-#ifndef GUI_H
-#define GUI_H
-
 #define RAYGUI_IMPLEMENTATION
-#include <raygui.h>
 
-typedef struct
-{
-    Rectangle rec;
-    char *text;
-} Button;
+#include "engine.h"
 
 Button initButton(char *text, Vector2 dimensions, Vector2 position)
 {
@@ -29,4 +21,3 @@ void renderButton(Button *b)
     GuiButton(b->rec, b->text);
 }
 
-#endif // GUI_H

@@ -1,29 +1,4 @@
-#ifndef GAMEGUI_H
-#define GAMEGUI_H
-
-#include "sprite.h"
-#include <raylib.h>
-
-typedef enum {
-    NOT_CLICKED,
-    HOVER,
-    CLICKED
-} ButtonState;
-
-typedef struct 
-{
-    Sprite sprite;
-    Vector2 notClicked;
-    Vector2 hover;
-    Vector2 clicked;
-    bool isHovered;
-    bool isClicked;
-} ImageButton;
-
-typedef struct
-{
-    Sprite sprite;
-} ImageElement;
+#include "engine.h"
 
 ImageButton CreateImageButton(ButtonState state, Texture2D *texture, const TextureAsset *asset, Vector2 *source, Vector2 *clicked, Vector2 *hover, Rectangle *destRec){
     return (ImageButton){
@@ -95,5 +70,3 @@ void renderImageElement(ImageElement *e){
     RenderSprite(&e->sprite);
 }
 
-
-#endif // GAMEGUI_H

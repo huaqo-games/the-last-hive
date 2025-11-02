@@ -1,10 +1,4 @@
-#ifndef VECTOR_H
-#define VECTOR_H
-
-typedef struct {
-    Vector2 *data;
-    size_t count;
-} Vector2Array;
+#include "engine.h"
 
 bool IsVectorZero(Vector2 v) {
     float epsilon = 0.01f;
@@ -18,4 +12,3 @@ Vector2 GetRandomVector(const Rectangle bounds) {
     };
 }
 
-#endif // VECTOR_H

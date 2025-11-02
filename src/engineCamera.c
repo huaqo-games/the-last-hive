@@ -1,8 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
-
-#include "input.h" 
-#include <raymath.h>
+#include "engine.h"
 
 Camera2D CreateCamera(Vector2 playerPosition, float initZoom){
     int windowWidth = GetScreenWidth();
@@ -29,5 +25,3 @@ void UpdateCamera2D(Camera2D* camera, Vector2* position, Mouse* mouse){
     UpdateCameraZoom(camera, &mouse->scaleFactor, &mouse->minZoom, &mouse->maxZoom);
 }
 
-
-#endif // CAMERA_H

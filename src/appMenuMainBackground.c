@@ -1,13 +1,4 @@
-#ifndef APPMENUMAINBACKGROUND_H
-#define APPMENUMAINBACKGROUND_H
-
-typedef struct {
-    Sprite sprite;
-    float scrolling;
-    float scale;
-    float scrollSpeed;
-    Vector2 pos;
-} Background;
+#include "appTypes.h"
 
 void InitBackground(float scrollSpeed, Background *bg, Texture2D *texture, const TextureAsset *backgroundAsset){
     bg->scrolling = 0.0f;
@@ -65,4 +56,3 @@ void RenderBackground(Background *bg){
 
 }
 
-#endif // APPMENUMAINBACKGROUND_H

@@ -1,17 +1,4 @@
-#ifndef APPGAMEBIRDS_H
-#define APPGAMEBIRDS_H
-
-typedef struct {
-	Sprite sprite;
-	Animation animation;
-	Physics physics;
-} Birds;
-
-typedef enum 
-{
-	FLYING,
-	BIRDS_TEX_COUNT
-} birdsTextureID;
+#include "appTypes.h"
 
 const TextureAsset birdsTextureAssets[BIRDS_TEX_COUNT] = {
 	{"assets/birds.png", 16.0f, 16.0f, 45.0f}
@@ -68,4 +55,3 @@ void RenderBirds(Birds *birds){
   RenderSprite(&birds->sprite);
 }
 
-#endif // APPGAMEBIRDS_H

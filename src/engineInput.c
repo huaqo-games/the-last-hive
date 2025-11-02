@@ -1,20 +1,4 @@
-#ifndef INPUT_H
-#define INPUT_H
-
-#include <raymath.h>
-
-typedef struct {
-    Vector2 screenPosition;
-    Vector2 worldPosition;
-    float zoomSpeed;
-    float minZoom;
-    float maxZoom;
-    float scaleFactor;
-    float wheelMove;
-    bool leftButton;
-    bool rightButton;
-    Texture2D cursorTexture;
-} Mouse;
+#include "engine.h"
 
 Mouse CreateMouse(float zoomSpeed, float minZoom, float maxZoom, Texture2D *texture){
     HideCursor();
@@ -57,5 +41,3 @@ Vector2 GetDirectionVector(void){
     if (Vector2Length(vector) > 0.0f) {vector = Vector2Normalize(vector); }
     return vector;
 }
-
-#endif //INPUT_H

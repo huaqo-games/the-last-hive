@@ -1,17 +1,4 @@
-#ifndef APPGAMEISLANDS_H
-#define APPGAMEISLANDS_H
-
-typedef struct {
-	Sprite sprite;
-	Animation animation;
-	Physics physics;
-} Islands;
-
-typedef enum 
-{
-	ISLAND,
-	ISLANDS_TEX_COUNT
-} islandsTextureID;
+#include "appTypes.h"
 
 const TextureAsset islandsTextureAssets[ISLANDS_TEX_COUNT] = {
 	{"assets/island.png", 16.0f, 16.0f, 0.0f}
@@ -57,6 +44,4 @@ void UpdateIslands(Islands *islands){
 void RenderIslands(Islands *islands){
   RenderSprite(&islands->sprite);
 }
-
-#endif // APPGAMEISLANDS_H
 

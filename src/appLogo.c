@@ -1,18 +1,4 @@
-#ifndef APPLOGO_H
-#define APPLOGO_H
-
-typedef struct {
-    int frameCounter;
-    int positionX;
-    int positionY;
-    int lettersCount;
-    int topSideRecWidth;
-    int leftSideRecHeight;
-    int bottomSideRecWidth;
-    int rightSideRecHeight;
-    int state;
-    float alpha;
-} LogoState;
+#include "appTypes.h"
 
 void InitLogo(LogoState *l) {
     SetTargetFPS(60);
@@ -114,4 +100,3 @@ void RenderLogo(const LogoState *l, Flags *flags) {
     EndDrawing();
 }
 
-#endif // APPLOGO_H

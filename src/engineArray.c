@@ -1,13 +1,7 @@
-#ifndef ARRAY_H
-#define ARRAY_H
+#include "engine.h"
 
-typedef struct {
-    void** elements;
-    unsigned int count;
-    unsigned int capacity;
-} Array;
-
-Array* CreateArray(unsigned int initCapacity){
+Array* CreateArray(unsigned int initCapacity)
+{
     Array* array = malloc(sizeof(Array));
     if (!array) return NULL;
 
@@ -22,7 +16,8 @@ Array* CreateArray(unsigned int initCapacity){
     return array;
 }
 
-int AddElementToArray(Array* array, void* element){
+int AddElementToArray(Array* array, void* element)
+{
     if(array->count >= array->capacity) {
         unsigned int newCapacity = array->capacity * 2;
         void** newElements = realloc(array->elements, sizeof(void*) * newCapacity);
@@ -48,7 +43,8 @@ int AddElementToArray(Array* array, void* element){
 // }
 
 // SWAP AND POP REMOVE
-int RemoveElementFromArray(Array* array, unsigned int index) {
+int RemoveElementFromArray(Array* array, unsigned int index) 
+{
     if (index >= array->count) return 0;
 
     array->elements[index] = array->elements[array->count - 1];
@@ -58,7 +54,8 @@ int RemoveElementFromArray(Array* array, unsigned int index) {
     return 1;
 }
 
-void* GetRandomElementFromArray(Array* array){
+void* GetRandomElementFromArray(Array* array)
+{
     if (array == NULL || array->elements == NULL || array->count == 0) {
         return NULL;
     }
@@ -82,7 +79,8 @@ void RenderArray(Array* array, void (*renderFunc)(void*))
     }
 }
 
-void FreeArray(Array** array) {
+void FreeArray(Array** array) 
+{
     if (!array || !*array) return;
 
     free((*array)->elements);
@@ -92,5 +90,3 @@ void FreeArray(Array** array) {
     *array = NULL;
 }
 
-
-#endif // ARRAY_H

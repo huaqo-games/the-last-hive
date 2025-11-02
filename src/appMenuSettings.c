@@ -1,13 +1,4 @@
-#ifndef APPMENUSETTINGS_H
-#define APPMENUSETTINGS_H
-
-
-typedef struct 
-{
-	Button showFPS;
-	Button soundtrackOn;
-
-} MenuSettings;
+#include "appTypes.h"
 
 void InitMenuSettings(MenuSettings *s)
 {
@@ -65,4 +56,3 @@ void ClenupMenuSettings(MenuSettings *s){
 
 }
 
-#endif // APPMENUSETTINGS_H

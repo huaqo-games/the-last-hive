@@ -1,11 +1,4 @@
-#ifndef SOUNDTRACK_H
-#define SOUNDTRACK_H
-
-typedef struct {
-    Music music;
-    bool playing;
-	bool paused;
-} Soundtrack;
+#include "engine.h"
 
 Soundtrack LoadSoundtrack(const char* musicPath){
     Soundtrack soundtrack = {
@@ -34,6 +27,4 @@ void UpdateSoundtrack(Soundtrack *soundtrack, bool playing){
 	}
 
 }
-
-#endif // SOUNDTRACK_H
 
