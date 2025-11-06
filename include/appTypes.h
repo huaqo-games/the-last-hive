@@ -171,7 +171,6 @@ typedef struct
     Soundtrack soundtracks[SOUNDTRACK_COUNT];
     RenderTexture2D target;
     Floor floor;
-    Player player;
   	Birds birds;
 	Islands islands;
     Mouse mouse;
@@ -230,9 +229,10 @@ void RenderFloor(Floor *floor);
 void UnloadFloor(Floor *floor);
 
 playerSpeedID GetPlayerSpeedID(float speed);
-Player CreatePlayer(void);
-void UpdatePlayer(Player *player);
-void RenderPlayer(Player *player);
+Player* GetPlayer(void);
+void CreatePlayer(void);
+void UpdatePlayer(void);
+void RenderPlayer(void);
 
 Birds CreateBirds(void);
 void UpdateBirds(Birds *birds);

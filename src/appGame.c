@@ -33,8 +33,9 @@ void InitGame(App *app)
 
   g->target = LoadRenderTexture(app->window.width, app->window.height);
 
-  g->player = CreatePlayer();
-  CreateCamera(g->player.physics.position, 10.0f);
+  CreatePlayer();
+  Player* player = GetPlayer();
+  CreateCamera(player->physics.position, 10.0f);
   g->birds = CreateBirds();
   g->islands = CreateIslands();
   g->floor = CreateFloor();
@@ -72,9 +73,10 @@ void UpdateGame(App *app)
     }
 
     UpdateMouse(&g->mouse);
-    UpdateCamera2D(&g->player.physics.position, &g->mouse);
+	Player* player = GetPlayer();
+    UpdateCamera2D(&player->physics.position, &g->mouse);
     UpdateFloor(&g->floor);
-    UpdatePlayer(&g->player);
+    UpdatePlayer();
     UpdateBirds(&g->birds);
 	UpdateIslands(&g->islands);
 }
@@ -83,7 +85,7 @@ void RenderComponents(App *app)
 {
 	GameState *g = &app->game;
     RenderFloor(&g->floor);
-    RenderPlayer(&g->player);
+    RenderPlayer();
     RenderBirds(&g->birds);
 	RenderIslands(&g->islands);
 }
