@@ -12,3 +12,16 @@ Vector2 GetRandomVector(const Rectangle bounds) {
     };
 }
 
+Vector2 RotationToVector2(float rotation)
+{
+	float rad = rotation * (PI / 180.0f);
+	Vector2 vec = { cosf(rad), sinf(rad) };
+	return vec;
+}
+
+float Vector2ToRotation(Vector2 vec)
+{
+    float rad = atan2f(vec.y, vec.x);
+    float deg = rad * (180.0f / PI);
+    return deg; 
+}
