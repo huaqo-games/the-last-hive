@@ -13,14 +13,9 @@ void UpdateSpriteDestRec(Sprite *sprite, const Vector2 *vector)
     sprite->destRec.y = vector->y;
 }
 
-void UpdateSpriteRotation(Sprite *sprite, Vector2 *vector)
+void UpdateSpriteRotation(Sprite *sprite, float rotation)
 {
-    if (Vector2Length(*vector) <= 0.0f)
-    {
-        return;
-    }
-    float targetRotation = (float)atan2(vector->y, vector->x) * (180.0f / PI) + 90.0f;
-    sprite->rotation = Lerp(sprite->rotation, targetRotation, 0.1f);
+    sprite->rotation = Lerp(sprite->rotation, rotation, 0.1f);
 }
 
 void RenderSprite(const Sprite *sprite)
