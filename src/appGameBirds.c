@@ -1,5 +1,47 @@
 #include "appTypes.h"
 
+
+
+
+Vector2 GetPositionInsideRectangle(Rectangle rec)
+{
+	int randX =	GetRandomValue(rec.x, rec.width);
+	int randY = GetRandomValue(rec.y, rec.height);
+	Vector2 randVector = {randX, randY};
+	return randVector;
+}
+
+Vector2 GetPositionOutsideRectangle(Rectangle rec, int min, int max)
+{
+    int side = GetRandomValue(0, 3);
+    Vector2 pos = {0};
+
+    switch (side)
+    {
+        case 0: // left
+            pos.x = rec.x - GetRandomValue(min, max);
+            pos.y = GetRandomValue((int)rec.y, (int)(rec.y + rec.height));
+            break;
+
+        case 1: // right
+            pos.x = rec.x + rec.width + GetRandomValue(min, max);
+            pos.y = GetRandomValue((int)rec.y, (int)(rec.y + rec.height));
+            break;
+
+        case 2: // top
+            pos.x = GetRandomValue((int)rec.x, (int)(rec.x + rec.width));
+            pos.y = rec.y - GetRandomValue(min, max);
+            break;
+
+        case 3: // bottom
+            pos.x = GetRandomValue((int)rec.x, (int)(rec.x + rec.width));
+            pos.y = rec.y + rec.height + GetRandomValue(min, max);
+            break;
+    }
+
+    return pos;
+}
+
 const TextureAsset birdsTextureAssets[BIRDS_TEX_COUNT] = {
 	{"assets/birds.png", 16.0f, 16.0f, 45.0f}
 };
@@ -29,10 +71,13 @@ Birds CreateBirds(void){
 		.animTimer = 0.0f
 	};
 
+	Rectangle cameraRec = GetCameraRectangle();
+	printf("cameraRec: %f, %f, %f, %f", cameraRec.x, cameraRec.y, cameraRec.width, cameraRec.height);
+
 	Physics birdsPhysics = {
-    .position = (Vector2){-100.0f, 0.0f},
+    .position = GetPositionOutsideRectangle(cameraRec, 1, 100),
     .direction = (Vector2){0.0f, 0.0f},
-    .speed = 10.0f
+    .speed = 5.0f
 	};
 
   return (Birds){
@@ -42,13 +87,17 @@ Birds CreateBirds(void){
   };
 	
 }
-
 void UpdateBirds(Birds *birds){
-  
-  UpdatePhysics(&birds->physics, (Vector2){1.0f,0.0f});
-  UpdateSpriteDestRec(&birds->sprite, &birds->physics.position);
-  UpdateAnimation(&birds->animation, GetFrameTime());
-  UpdateSpriteSourceRec(&birds->sprite, &(Vector2){birds->sprite.frameSize.x * birds->animation.currentFrame, birds->sprite.frameSize.y});
+	Camera2D *camera = GetCamera();
+	Vector2 dir = {camera->target.x - birds->physics.position.x, camera->target.y - birds->physics.position.y};
+	UpdatePhysics(&birds->physics, dir);
+	printf("birdsPos: %f, %f", birds->physics.position.x, birds->physics.position.y);
+	printf("cameraTarget: %f, %f",camera->target.x, camera->target.y );
+	UpdateSpriteDestRec(&birds->sprite, &birds->physics.position);
+	float rotation = Vector2ToRotation(dir);
+	UpdateSpriteRotation(&birds->sprite, rotation + 45.0f);
+	UpdateAnimation(&birds->animation, GetFrameTime());
+	UpdateSpriteSourceRec(&birds->sprite, &(Vector2){birds->sprite.frameSize.x * birds->animation.currentFrame, birds->sprite.frameSize.y});
 }
 
 void RenderBirds(Birds *birds){
