@@ -1,3 +1,4 @@
+#include "engine.h"
 #include "appTypes.h"
 
 const ShaderAsset shaderAssets[SHADER_COUNT] = {
@@ -11,7 +12,9 @@ const SoundtrackAsset soundtrackAssets[SOUNDTRACK_COUNT] = {
 
 void InitGame(App *app)
 {
-   GameState *g = &app->game;
+	
+  SetRandomSeed(1234);
+  GameState *g = &app->game;
   g->assets = (Assets){
       .shaderAssets = shaderAssets,
       .soundtrackAssets = soundtrackAssets
@@ -27,12 +30,14 @@ void InitGame(App *app)
       g->soundtracks[i] = LoadSoundtrack(g->assets.soundtrackAssets[i].path);
   }
 
+
   g->target = LoadRenderTexture(app->window.width, app->window.height);
+
   g->player = CreatePlayer();
+  CreateCamera(g->player.physics.position, 10.0f);
   g->birds = CreateBirds();
   g->islands = CreateIslands();
   g->floor = CreateFloor();
-  g->camera = CreateCamera(g->player.physics.position, 10.0f);
 
   Texture2D mouseTexture = LoadTexture("assets/mouse.png");
   g->mouse = CreateMouse(0.10f, 5.0f, 10.0f, &mouseTexture);
@@ -66,9 +71,9 @@ void UpdateGame(App *app)
         UpdateSoundtrack(&g->soundtracks[i], app->flags.soundtrackOn);
     }
 
-    UpdateMouse(&g->mouse, &g->camera);
-    UpdateCamera2D(&g->camera, &g->player.physics.position, &g->mouse);
-    UpdateFloor(&g->floor, &g->camera);
+    UpdateMouse(&g->mouse);
+    UpdateCamera2D(&g->player.physics.position, &g->mouse);
+    UpdateFloor(&g->floor);
     UpdatePlayer(&g->player);
     UpdateBirds(&g->birds);
 	UpdateIslands(&g->islands);
@@ -89,7 +94,8 @@ void RenderGame(App *app)
 	
     BeginTextureMode(g->target);
     ClearBackground(BLACK);
-    BeginMode2D(g->camera);
+	Camera2D *camera = GetCamera();
+    BeginMode2D(*camera);
     RenderComponents(app);
     EndMode2D();
     DrawTextureRec

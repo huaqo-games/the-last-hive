@@ -1,3 +1,4 @@
+#include "engine.h"
 #include "appTypes.h"
 
 Floor CreateFloor(void)
@@ -54,8 +55,9 @@ Floor CreateFloor(void)
     return floor;
 }
 
-void UpdateFloor(Floor *floor, const Camera2D *camera)
+void UpdateFloor(Floor *floor)
 {
+	Camera2D *camera = GetCamera();
     floor->bounds.x = (int)((camera->target.x - (GetScreenWidth() / 2.0f / camera->zoom)) / floor->sprite.frameSize.x) - 1;
     floor->bounds.width = (int)((camera->target.x + (GetScreenWidth() / 2.0f / camera->zoom)) / floor->sprite.frameSize.x) + 1;
     floor->bounds.y = (int)((camera->target.y - (GetScreenHeight() / 2.0f / camera->zoom)) / floor->sprite.frameSize.y) - 1;

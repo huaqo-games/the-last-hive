@@ -15,8 +15,8 @@ void UpdateMouseScreen(Mouse *mouse){
 
 }
 
-void UpdateMouse(Mouse *mouse, Camera2D *camera) {
-
+void UpdateMouse(Mouse *mouse) {
+	Camera2D* camera = GetCamera();
     Vector2 pos = GetMousePosition();
     mouse->screenPosition = pos;
     mouse->worldPosition = GetScreenToWorld2D(pos, *camera);
