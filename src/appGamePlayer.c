@@ -109,8 +109,7 @@ void UpdatePlayer(Player *player)
 
 	player->sprite.rotation = player->rotation;
 
-	float rad = (player->rotation - 90.0f) * (PI / 180.0f);
-	Vector2 dir = { cosf(rad), sinf(rad) };
+	Vector2 dir = RotationToVector2(player->rotation - 90.0f);
 
 
     UpdatePhysics(&player->physics, dir);
