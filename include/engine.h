@@ -232,5 +232,8 @@ Vector2 GetRandomVector(const Rectangle bounds);
 Vector2 RotationToVector2(float rotation);
 float Vector2ToRotation(Vector2 vec);
 
+Vector2 GetPositionInsideRectangle(Rectangle rec);
+Vector2 GetPositionOutsideRectangle(Rectangle rec, int min, int max);
+
 #endif //ENGINE_H
 
