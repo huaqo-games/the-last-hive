@@ -152,12 +152,14 @@ typedef struct
 	float rotation;
 } Player;
 
+#define MAX_BIRDS 100
 typedef struct {
-	Sprite sprite;
-	Animation animation;
-	Physics physics;
-	bool arrived;
-	Vector2 destPos;
+	int count;
+	Sprite sprite[MAX_BIRDS];
+	Animation animation[MAX_BIRDS];
+	Physics physics[MAX_BIRDS];
+	bool arrived[MAX_BIRDS];
+	Vector2 destPos[MAX_BIRDS];
 } Birds;
 
 typedef struct {
