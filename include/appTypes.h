@@ -174,7 +174,6 @@ typedef struct
     Player player;
   	Birds birds;
 	Islands islands;
-    Camera2D camera;
     Mouse mouse;
     Image image;
 } GameState;
@@ -226,7 +225,7 @@ void RenderMenu(MenuState *m, Font *font, const char *title, Flags *flags);
 void CleanupMenu(MenuState *m);
 
 Floor CreateFloor(void);
-void UpdateFloor(Floor *floor, const Camera2D *camera);
+void UpdateFloor(Floor *floor);
 void RenderFloor(Floor *floor);
 void UnloadFloor(Floor *floor);
 

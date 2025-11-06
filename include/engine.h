@@ -160,10 +160,12 @@ void UpdateArray(Array* array, void (*updateFunc)(void*));
 void RenderArray(Array* array, void (*renderFunc)(void*));
 void FreeArray(Array** array);
 
-Camera2D CreateCamera(Vector2 playerPosition, float initZoom);
-void UpdateCameraTarget(Camera2D *camera, Vector2 *position, const float smoothness);
-void UpdateCameraZoom(Camera2D *camera, const float *scaleFactor, const float *minZoom, const float *maxZoom);
-void UpdateCamera2D(Camera2D* camera, Vector2* position, Mouse* mouse);
+Camera2D* GetCamera(void);
+Rectangle GetCameraRectangle(void);
+void CreateCamera(Vector2 playerPosition, float initZoom);
+void UpdateCameraTarget(Vector2 *position, const float smoothness);
+void UpdateCameraZoom(const float *scaleFactor, const float *minZoom, const float *maxZoom);
+void UpdateCamera2D(Vector2* position, Mouse* mouse);
 
 void InitConfig(Config *config, const char* path);
 int GetConfigInt(Config *config, const char *key);
@@ -193,7 +195,7 @@ void renderButton(Button *b);
 
 Mouse CreateMouse(float zoomSpeed, float minZoom, float maxZoom, Texture2D *texture);
 void UpdateMouseScreen(Mouse *mouse);
-void UpdateMouse(Mouse *mouse, Camera2D *camera);
+void UpdateMouse(Mouse *mouse);
 Vector2 GetDirectionVector(void);
 
 ObjectArray CreateObjectArray(const Object *prototype, const size_t count);
@@ -221,12 +223,14 @@ void UpdateSoundtrack(Soundtrack *soundtrack, bool playing);
 
 void UpdateSpriteSourceRec(Sprite *sprite, const Vector2 *vector);
 void UpdateSpriteDestRec(Sprite *sprite, const Vector2 *vector);
-void UpdateSpriteRotation(Sprite *sprite, Vector2 *vector);
+void UpdateSpriteRotation(Sprite *sprite, float rotation);
 void RenderSprite(const Sprite *sprite);
 void PrintSprite(const Sprite *sprite);
 
 bool IsVectorZero(Vector2 v);
 Vector2 GetRandomVector(const Rectangle bounds);
+Vector2 RotationToVector2(float rotation);
+float Vector2ToRotation(Vector2 vec);
 
 #endif //ENGINE_H
 
