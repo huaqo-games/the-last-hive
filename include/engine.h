@@ -207,6 +207,7 @@ void SwapAndPopObjectsArrayOnRecCollision(ObjectArray *objects, const Rectangle 
 void SwapAndPopObjectsArrayOnPointCollision(ObjectArray *objects, const Vector2 point);
 void RenderObjectArray(const ObjectArray *objects);
 
+Vector2 GetDirectionBetweenTwoVectors(Vector2 vec1, Vector2 vec2);
 void UpdatePhysicsDirection(Vector2 *direction, Vector2 vector);
 void UpdatePhysicsVelocity(Vector2 *velocity, Vector2 *direction, float *speed);
 void UpdatePhysicsPosition(Vector2 *position, Vector2 *velocity);

@@ -1,4 +1,5 @@
 #include "appTypes.h"
+#include "engine.h"
 
 
 const TextureAsset birdsTextureAssets[BIRDS_TEX_COUNT] = {
@@ -48,7 +49,7 @@ Birds CreateBirds(void){
 }
 void UpdateBirds(Birds *birds){
 	Camera2D *camera = GetCamera();
-	Vector2 dir = {camera->target.x - birds->physics.position.x, camera->target.y - birds->physics.position.y};
+	Vector2 dir = GetDirectionBetweenTwoVectors(birds->physics.position, camera->target);
 	UpdatePhysics(&birds->physics, dir);
 	printf("birdsPos: %f, %f", birds->physics.position.x, birds->physics.position.y);
 	printf("cameraTarget: %f, %f",camera->target.x, camera->target.y );

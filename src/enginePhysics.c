@@ -1,5 +1,12 @@
 #include "engine.h"
 
+Vector2 GetDirectionBetweenTwoVectors(Vector2 vec1, Vector2 vec2)
+{
+	Vector2 dir = {vec2.x - vec1.x, vec2.y - vec1.y};	
+	dir = Vector2Normalize(dir);
+	return dir;
+}
+
 void UpdatePhysicsDirection(Vector2 *direction, Vector2 vector)
 {
     *direction = Vector2Normalize(vector);
