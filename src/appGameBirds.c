@@ -43,13 +43,25 @@ Birds CreateBirds(void){
   return (Birds){
     .sprite = birdSprite,
     .animation = birdsAnimation,
-    .physics = birdsPhysics
+    .physics = birdsPhysics,
+	.arrived = true,
+	.destPos = {0.0f, 0.0f}
   };
 	
 }
 void UpdateBirds(Birds *birds){
 	Camera2D *camera = GetCamera();
-	Vector2 dir = GetDirectionBetweenTwoVectors(birds->physics.position, camera->target);
+	Rectangle cameraRec = GetCameraRectangle();
+	if(birds->arrived)
+	{
+		birds->destPos = GetPositionOutsideRectangle(cameraRec, 1, 100);
+		birds->arrived = false;
+	}
+	if(CheckCollisionPointCircle(birds->physics.position, birds->destPos, 10.0F))
+	{
+		birds->arrived = true;
+	}	
+	Vector2 dir = GetDirectionBetweenTwoVectors(birds->physics.position, birds->destPos);
 	UpdatePhysics(&birds->physics, dir);
 	printf("birdsPos: %f, %f", birds->physics.position.x, birds->physics.position.y);
 	printf("cameraTarget: %f, %f",camera->target.x, camera->target.y );

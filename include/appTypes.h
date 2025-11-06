@@ -156,6 +156,8 @@ typedef struct {
 	Sprite sprite;
 	Animation animation;
 	Physics physics;
+	bool arrived;
+	Vector2 destPos;
 } Birds;
 
 typedef struct {
