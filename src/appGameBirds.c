@@ -37,7 +37,7 @@ Birds CreateBirds(void){
 		Rectangle cameraRec = GetCameraRectangle();
 
 		birds.physics[i] = (Physics){
-		.position = GetPositionOutsideRectangle(cameraRec, 1, 100),
+		.position = GetPositionOutsideRectangle(cameraRec, 100, 1000),
 		.direction = (Vector2){0.0f, 0.0f},
 		.speed = 5.0f
 		};
@@ -58,13 +58,16 @@ void UpdateBirds(Birds *birds){
 	{
 		if(birds->arrived[i])
 		{
-			birds->destPos[i] = GetPositionOutsideRectangle(cameraRec, 1, 100);
+			birds->destPos[i] = GetPositionOutsideRectangle(cameraRec, 100, 1000);
 			birds->arrived[i] = false;
 		}
 		if(CheckCollisionPointCircle(birds->physics[i].position, birds->destPos[i], 10.0F))
 		{
 			birds->arrived[i] = true;
 		}	
+		if(GetDistanceBetweenTwoVectors(birds->physics[i].position, camera->target) > 1000){
+			birds->physics[i].position = GetPositionOutsideRectangle(cameraRec, 100, 1000);
+		}
 		Vector2 dir = GetDirectionBetweenTwoVectors(birds->physics[i].position, birds->destPos[i]);
 		UpdatePhysics(&birds->physics[i], dir);
 		printf("birdsPos: %f, %f", birds->physics[i].position.x, birds->physics[i].position.y);

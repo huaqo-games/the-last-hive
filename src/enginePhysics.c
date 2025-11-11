@@ -7,6 +7,13 @@ Vector2 GetDirectionBetweenTwoVectors(Vector2 vec1, Vector2 vec2)
 	return dir;
 }
 
+float GetDistanceBetweenTwoVectors(Vector2 vec1, Vector2 vec2)
+{
+    float dx = vec1.x - vec2.x;
+    float dy = vec1.y - vec2.y;
+    return sqrtf(dx * dx + dy * dy);
+}
+
 void UpdatePhysicsDirection(Vector2 *direction, Vector2 vector)
 {
     *direction = Vector2Normalize(vector);
